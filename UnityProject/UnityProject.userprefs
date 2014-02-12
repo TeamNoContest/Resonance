@@ -1,8 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\RR_Classes\GenericUnitBehavior.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\RR_Classes\CameraPlayerTracker.cs">
     <Files>
-      <File FileName="Assets\RR_Classes\GenericUnitBehavior.cs" Line="38" Column="1" />
+      <File FileName="Assets\RR_Classes\CameraPlayerTracker.cs" Line="31" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
