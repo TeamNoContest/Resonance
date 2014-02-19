@@ -46,9 +46,11 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\RR_Classes\CameraPlayerTracker.cs" />
-     <Compile Include="Assets\RR_Classes\GameController.cs" />
-     <Compile Include="Assets\RR_Classes\GenericUnitBehavior.cs" />
+     <Compile Include="Assets\RR_Scripts\CameraPlayerTracker.cs" />
+     <Compile Include="Assets\RR_Scripts\ChaserScript.cs" />
+     <Compile Include="Assets\RR_Scripts\GameController.cs" />
+     <Compile Include="Assets\RR_Scripts\GenericUnitBehavior.cs" />
+     <Compile Include="Assets\RR_Scripts\RespawnScript.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
