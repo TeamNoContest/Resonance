@@ -1,4 +1,4 @@
-﻿// CameraScript.cs
+// CameraScript.cs
 //
 // Q and E rotate camera. 9 and 0 zoom out and in. This will change when we use an Xbox controller:
 // Holding the left shoulder button will put the player in "camera mode." While it's held, the
@@ -13,18 +13,16 @@ public class CameraScript : MonoBehaviour
 {
 	public const int MIN_ZOOM_DISTANCE = 80;
 	public const int MAX_ZOOM_DISTANCE = 200;
-	public Transform target;
-	public float distance;
-	public float lift;
-	public float xPosition;
+
+	Transform target;
 
 	void Start()
 	{
+		target = transform.parent;
 	}
 
 	void Update()
 	{
-		//transform.position = target.position + new Vector3(xPosition, lift, distance);
 		transform.LookAt(target);
 
 		if(Input.GetKey(KeyCode.Q))
