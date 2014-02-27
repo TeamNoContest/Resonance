@@ -25,16 +25,16 @@ public class CameraScript : MonoBehaviour
 	{
 		transform.LookAt(target);
 
-		if(Input.GetKey(KeyCode.Q))
+		if(Input.GetKey(KeyCode.Q) || Input.GetAxis("RightStick Horizontal") > 0)
 		{
 			transform.RotateAround(target.position, Vector3.up, 40 * Time.deltaTime);
 		}
-		else if(Input.GetKey(KeyCode.E))
+		else if(Input.GetKey(KeyCode.E) || Input.GetAxis("RightStick Horizontal") < 0)
 		{
 			transform.RotateAround(target.position, -Vector3.up, 40 * Time.deltaTime);
 		}
 
-		if(Input.GetKey(KeyCode.Alpha9))
+		if(Input.GetKey(KeyCode.Alpha9) || Input.GetAxis("RightStick Vertical") > 0)
 		{
 			Debug.Log(Vector3.Distance(transform.position, target.position));
 
@@ -43,7 +43,7 @@ public class CameraScript : MonoBehaviour
 				transform.position += transform.forward * -1;
 			}
 		}
-		else if(Input.GetKey(KeyCode.Alpha0))
+		else if(Input.GetKey(KeyCode.Alpha0) || Input.GetAxis("RightStick Vertical") < 0)
 		{
 			Debug.Log(Vector3.Distance(transform.position, target.position));
 
