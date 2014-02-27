@@ -49,6 +49,7 @@
      <Compile Include="Assets\RR_Scripts\CameraPlayerTracker.cs" />
      <Compile Include="Assets\RR_Scripts\CameraScript.cs" />
      <Compile Include="Assets\RR_Scripts\ChaserScript.cs" />
+     <Compile Include="Assets\RR_Scripts\GUIScript.cs" />
      <Compile Include="Assets\RR_Scripts\GameController.cs" />
      <Compile Include="Assets\RR_Scripts\GenericUnitBehavior.cs" />
      <Compile Include="Assets\RR_Scripts\PlayerScript.cs" />
