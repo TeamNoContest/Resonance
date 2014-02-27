@@ -8,29 +8,36 @@ public class GenericUnitBehavior : MonoBehaviour
 	{
 		Dummy,
 		ChaseTarget,
+		FollowPlayer,
+		GatherNearestResourcePoint,
+		ReturnToBase,
+		HoldDefensive,
+
 		//Other states go here.
 	}
 
 	//Property Instantiation Section
-	public State state = State.ChaseTarget;
+	public State state = State.FollowPlayer;
 
 	public string AllyTag { get; set; }
 
-	private float GatheringRate { get; set; }
+	protected float GatheringRate { get; set; }
 
-	private float AttackRate { get; set; }
+	protected float AttackRate { get; set; }
 
-	private float RateModifer { get; set; }
+	protected float RateModifer { get; set; }
 
-	private float MovementSpeed { get; set; }
+	protected float MovementSpeed { get; set; }
 
-	private float ResourceCapacity { get; set; }
+	protected float ResourceCapacity { get; set; }
 
-	private float ResourceLoad { get; set; }
+	protected float ResourceLoad { get; set; }
 
-	private float Integrity { get; set; } //This is kinda like a healthbar. This shouldn't be very important in our prototype's mode of play.;
+	protected float Integrity { get; set; } //This is kinda like a healthbar. This shouldn't be very important in our prototype's mode of play.;
 
-	private Vector3 startPosition;
+	protected Vector3 startPosition;
+
+	protected const float distanceTreshold = 5.0f;
 
 	public GameObject target;
 
@@ -55,14 +62,9 @@ public class GenericUnitBehavior : MonoBehaviour
 		case State.ChaseTarget:
 			//Pick the cloest target with the appropriate tag and move towards it. - Moore
 			target = FindClosestGameObjectWithTag("Target");
-			
-			if (target != null) 
-			{
-				//Make sure to check that the target is within a desirable distance. So there should be a maximum distance variable. - Moore
-				transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z ));
-				transform.position += (transform.forward * MovementSpeed);
-			}
-			
+			FlyTowardsGameObject(target);
+
+
 			//If too far from the start position, teleport back to start.
 			if (Vector3.Distance(startPosition, transform.position) > 100) 
 			{ 
@@ -70,6 +72,22 @@ public class GenericUnitBehavior : MonoBehaviour
 			}
 
 			break;
+
+		case State.FollowPlayer:
+			target = FindClosestGameObjectWithTag("Player");
+			FlyTowardsGameObject(target);
+			break;
+
+		case State.GatherNearestResourcePoint:
+			target = FindClosestGameObjectWithTag("ResourcePoint");
+			//GatherResources(target); //To make this work, we'd need to get the script component and reference that. - Moore
+			break;
+
+		case State.ReturnToBase:
+
+			break;
+
+
 
 		default:
 			{
@@ -93,6 +111,19 @@ public class GenericUnitBehavior : MonoBehaviour
 	//Mutator Methods - End
 
 	//Utility Methods - Start
+
+	protected void FlyTowardsGameObject(GameObject destination)
+	{
+		if (destination != null) 
+		{
+			//Make sure to check that the target is within a desirable distance. So there should be a maximum distance variable. - Moore
+			transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z ));
+			if (Vector3.Distance(transform.position, destination.transform.position) > distanceTreshold) //4:23 Defect - Had the < intstead of >.
+			{
+				transform.position += (transform.forward * MovementSpeed);
+			}
+		}
+	}
 
 	GameObject FindClosestGameObjectWithTag(string tagToFind)
 	{
