@@ -54,6 +54,7 @@
      <Compile Include="Assets\RR_Scripts\GenericUnitBehavior.cs" />
      <Compile Include="Assets\RR_Scripts\PlayerScript.cs" />
      <Compile Include="Assets\RR_Scripts\RespawnScript.cs" />
+     <Compile Include="Assets\RR_Scripts\UnitResourcePointBehavior.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
