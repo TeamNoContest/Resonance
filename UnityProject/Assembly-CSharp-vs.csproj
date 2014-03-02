@@ -53,6 +53,7 @@
      <Compile Include="Assets\RR_Scripts\GameController.cs" />
      <Compile Include="Assets\RR_Scripts\GenericUnitBehavior.cs" />
      <Compile Include="Assets\RR_Scripts\PlayerScript.cs" />
+     <Compile Include="Assets\RR_Scripts\ResourcePointScript.cs" />
      <Compile Include="Assets\RR_Scripts\RespawnScript.cs" />
      <Compile Include="Assets\RR_Scripts\UnitResourcePointBehavior.cs" />
   </ItemGroup>
