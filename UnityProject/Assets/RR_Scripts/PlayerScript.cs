@@ -3,37 +3,41 @@ using System.Collections;
 
 public class PlayerScript : MonoBehaviour
 {
-	private bool cameraMode = false;
+	private Vector3 camForward, camRight;
+	private float vertMove, horizMove;
+
 	void Update()
 	{
-		if(Input.GetKeyDown(KeyCode.C))
+		camForward = Camera.main.transform.forward;
+		camRight = Camera.main.transform.right;
+
+		vertMove = Input.GetAxis("Vertical");
+		horizMove = Input.GetAxis("Horizontal");
+
+		if(vertMove < 0)	// Back
 		{
-			cameraMode = true;
+			camForward = new Vector3(camForward.x, 0, camForward.z);	// Ignore the y value
+			transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, camForward, 10 * Time.deltaTime, 0f));
+			transform.position += camForward * -1;
 		}
-		else if(Input.GetKeyUp(KeyCode.C))
+		else if(vertMove > 0)	// Forward
 		{
-			cameraMode = false;
+			camForward = new Vector3(camForward.x, 0, camForward.z);
+			transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, -camForward, 10 * Time.deltaTime, 0f));
+			transform.position += camForward;
 		}
 
-		if(!cameraMode)
+		if(horizMove < 0)
 		{
-			if(Input.GetAxis("Vertical") < 0)
-			{
-				transform.position += transform.forward;
-			}
-			else if(Input.GetAxis("Vertical") > 0)
-			{
-				transform.position += transform.forward * -1;
-			}
-
-			if(Input.GetAxis("Horizontal") < 0)
-			{
-				transform.position += transform.right;
-			}
-			else if(Input.GetAxis("Horizontal") > 0)
-			{
-				transform.position += transform.right * -1;
-			}
+			camRight = new Vector3(camRight.x, 0, camRight.z);
+			transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, camRight, 10 * Time.deltaTime, 0f));
+			transform.position += camRight * -1;
+		}
+		else if(horizMove > 0)
+		{
+			camRight = new Vector3(camRight.x, 0, camRight.z);
+			transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, -camRight, 10 * Time.deltaTime, 0f));
+			transform.position += camRight;
 		}
 	}
 }
