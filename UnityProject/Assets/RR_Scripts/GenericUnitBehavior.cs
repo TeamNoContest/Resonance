@@ -13,6 +13,7 @@ public class GenericUnitBehavior : MonoBehaviour
 		ReturnToBase,
 		HoldDefensive,
 		DropoffAtFreighter,
+		Attack,
 		
 		//Other states go here.
 	}
