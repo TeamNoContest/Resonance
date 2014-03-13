@@ -243,22 +243,24 @@ public class GenericUnitBehavior : MonoBehaviour
 				//Bank the interest from existing resources.
 				ResourceLoad += ResourceLoad * interestRate * Time.deltaTime;
 
+				/* NOTE FROM JARED: I'm commenting out the autospend to test my manual spend.
 				//If the player has enough resources, auto-spend some of it to make more units. - Moore
 				//TODO: It would be preferable to get rid of auto-spend and instead have the player use a command to make more units at will.
 				if (ResourceLoad > 1500) 
 				{
 					ResourceLoad -= 1500;
-					/*
-					 * I was never able to make this version work.
-					GameObject newAlliedUnit = Instantiate(Resources.Load<GameObject>("/RR_Prefabs/Interceptor"), transform.position, Quaternion.identity) as GameObject;
-					GameObject newAlliedUnit2 = Instantiate(Resources.Load<GameObject>("RR_Prefabs/Resonator"), transform.position, Quaternion.identity) as GameObject;
-					GameObject newAlliedUnit3 = Instantiate(Resources.Load<GameObject>("RR_Prefabs/Freighter"), transform.position, Quaternion.identity) as GameObject;
-					*/
+
+					//I was never able to make this version work.
+					//GameObject newAlliedUnit = Instantiate(Resources.Load<GameObject>("/RR_Prefabs/Interceptor"), transform.position, Quaternion.identity) as GameObject;
+					//GameObject newAlliedUnit2 = Instantiate(Resources.Load<GameObject>("RR_Prefabs/Resonator"), transform.position, Quaternion.identity) as GameObject;
+					//GameObject newAlliedUnit3 = Instantiate(Resources.Load<GameObject>("RR_Prefabs/Freighter"), transform.position, Quaternion.identity) as GameObject;
+
 
 					GameObject newAlliedUnit = Instantiate(templateInterceptor, transform.position, Quaternion.identity) as GameObject;
 					GameObject newAlliedUnit2 = Instantiate(templateResonator, transform.position, Quaternion.identity) as GameObject;
 					GameObject newAlliedUnit3 = Instantiate(templateFreighter, transform.position, Quaternion.identity) as GameObject;
 				}
+				*/
 			}
 			break;
 		}

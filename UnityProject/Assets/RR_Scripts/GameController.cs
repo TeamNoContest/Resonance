@@ -16,12 +16,17 @@ public class GameController : MonoBehaviour
 	float interestTime;		// The amount of time in seconds between interest awards
 	int unitCount;			// Current number of units under player control
 	int unitCap;			// Maximum number of units available to purchase
+	int interceptorCost;	// Cost in resources to create a new Interceptor
+	int freighterCost;		// Cost in resources to create a new Freighter
+	int resonatorCost;		// Cost in resources to create a new Resonator
+
+	// Variables to hold the unit prefabs for the purpose of spawning new units
+	public GameObject interceptorPrefab, freighterPrefab, resonatorPrefab;
 
 	//I realize I shouldn't directly manipulate your code, but this is done to have the always up-to-date value from the player/mothership. - Moore
-	GameObject thePlayer;
-	GenericUnitBehavior thePlayerScript;
+	GameObject player;
+	GenericUnitBehavior playerScript;
 
-	// Use this for initialization
 	void Start()
 	{
 		gameMode = GameMode.TimeLimit;
@@ -33,26 +38,37 @@ public class GameController : MonoBehaviour
 		interestTime = 5f;
 		unitCount = 0;
 		unitCap = 10;
+		interceptorCost = 1000;
+		freighterCost = 1000;
+		resonatorCost = 1000;
 
 		//InvokeRepeating("AwardInterest", interestTime, interestTime); // Sorry for tweaking this without asking first. Gonna use Time.deltaTime for continuous intrest accruement. - Moore
 
 		//Initializing the values that retlate this to the other script. 
 		//This is not the best OOP because of the forced coupling. If you have an idea for how to keep the functionality and reduce this coupling, let me know. - Moore
-		thePlayer = GameObject.FindGameObjectWithTag("Player");
-		thePlayerScript = thePlayer.GetComponent<GenericUnitBehavior>();
-		resourceCurrent = (int)thePlayerScript.ResourceLoad;
-
+		player = GameObject.FindGameObjectWithTag("Player");
+		playerScript = player.GetComponent<GenericUnitBehavior>();
+		resourceCurrent = (int)playerScript.ResourceLoad;
 	}
 
-	// Update is called once per frame
+	void OnEnable()
+	{
+		GUIScript.Spawn += SpawnUnit;
+	}
+
+	void OnDisable()
+	{
+		GUIScript.Spawn -= SpawnUnit;
+	}
+
 	void Update()
 	{
 		// Listen for Unit Increase/Decrease event.
 
 		//Keeping the value up to date with respect to the player - Moore.
-		if (thePlayerScript != null)
+		if (playerScript != null)
 		{
-			resourceCurrent = (int)thePlayerScript.ResourceLoad;
+			resourceCurrent = (int)playerScript.ResourceLoad;
 		}
 	}
 
@@ -88,6 +104,24 @@ public class GameController : MonoBehaviour
 		}
 	}
 
+	void SpawnUnit(string unit)
+	{
+		switch(unit.ToLower())
+		{
+		case "interceptor":
+			Instantiate(interceptorPrefab, player.transform.position, Quaternion.identity);
+			break;
+		case "freighter":
+			Instantiate(freighterPrefab, player.transform.position, Quaternion.identity);
+			break;
+		case "resonator":
+			Instantiate(resonatorPrefab, player.transform.position, Quaternion.identity);
+			break;
+		default:
+			break;
+		}
+	}
+
 	public int[] GetResources()
 	{
 		int[] temp = {resourceCurrent, resourceGoal};
@@ -103,5 +137,11 @@ public class GameController : MonoBehaviour
 	public float GetInterestRate() //ACCESSOR: Added this so I can check it in the Units. - Moore
 	{
 		return interestRate;
+	}
+
+	public int[] GetUnitCosts()
+	{
+		int[] temp = {interceptorCost, freighterCost, resonatorCost};
+		return temp;
 	}
 }

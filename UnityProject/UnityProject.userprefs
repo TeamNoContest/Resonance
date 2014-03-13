@@ -1,8 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\RR_Scripts\GenericUnitBehavior.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\RR_Scripts\GUIScript.cs">
     <Files>
-      <File FileName="Assets\RR_Scripts\GenericUnitBehavior.cs" Line="452" Column="1" />
+      <File FileName="Assets\RR_Scripts\GUIScript.cs" Line="65" Column="36" />
+      <File FileName="Assets\RR_Scripts\GameController.cs" Line="23" Column="77" />
+      <File FileName="Assets\RR_Scripts\GenericUnitBehavior.cs" Line="246" Column="82" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
