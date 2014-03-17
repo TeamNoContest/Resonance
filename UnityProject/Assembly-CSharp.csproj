@@ -49,12 +49,14 @@
      <Compile Include="Assets\RR_Scripts\CameraPlayerTracker.cs" />
      <Compile Include="Assets\RR_Scripts\CameraScript.cs" />
      <Compile Include="Assets\RR_Scripts\ChaserScript.cs" />
+     <Compile Include="Assets\RR_Scripts\ExpandandSelect.cs" />
      <Compile Include="Assets\RR_Scripts\GUIScript.cs" />
      <Compile Include="Assets\RR_Scripts\GameController.cs" />
      <Compile Include="Assets\RR_Scripts\GenericUnitBehavior.cs" />
      <Compile Include="Assets\RR_Scripts\PlayerScript.cs" />
      <Compile Include="Assets\RR_Scripts\ResourcePointScript.cs" />
      <Compile Include="Assets\RR_Scripts\RespawnScript.cs" />
+     <Compile Include="Assets\RR_Scripts\TestCollision.cs" />
      <Compile Include="Assets\RR_Scripts\UnitResourcePointBehavior.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
