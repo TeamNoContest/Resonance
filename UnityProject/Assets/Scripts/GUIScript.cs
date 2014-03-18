@@ -84,7 +84,7 @@ public class GUIScript : MonoBehaviour
 		#region Display Restart Button
 		if(GUI.Button(new Rect(10, Screen.height - 85, 75, 75), "Restart"))
 		{
-			Application.LoadLevel(1);
+			Application.LoadLevel("DefaultTestingScene");
 		}
 		#endregion
 	}
