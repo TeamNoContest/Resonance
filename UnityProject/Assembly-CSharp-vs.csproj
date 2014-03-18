@@ -46,18 +46,19 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\RR_Scripts\CameraPlayerTracker.cs" />
-     <Compile Include="Assets\RR_Scripts\CameraScript.cs" />
-     <Compile Include="Assets\RR_Scripts\ChaserScript.cs" />
-     <Compile Include="Assets\RR_Scripts\ExpandandSelect.cs" />
-     <Compile Include="Assets\RR_Scripts\GUIScript.cs" />
-     <Compile Include="Assets\RR_Scripts\GameController.cs" />
-     <Compile Include="Assets\RR_Scripts\GenericUnitBehavior.cs" />
-     <Compile Include="Assets\RR_Scripts\PlayerScript.cs" />
-     <Compile Include="Assets\RR_Scripts\ResourcePointScript.cs" />
-     <Compile Include="Assets\RR_Scripts\RespawnScript.cs" />
-     <Compile Include="Assets\RR_Scripts\TestCollision.cs" />
-     <Compile Include="Assets\RR_Scripts\UnitResourcePointBehavior.cs" />
+     <Compile Include="Assets\Scripts\CameraPlayerTracker.cs" />
+     <Compile Include="Assets\Scripts\CameraScript.cs" />
+     <Compile Include="Assets\Scripts\ChaserScript.cs" />
+     <Compile Include="Assets\Scripts\ExpandandSelect.cs" />
+     <Compile Include="Assets\Scripts\GUIScript.cs" />
+     <Compile Include="Assets\Scripts\GameController.cs" />
+     <Compile Include="Assets\Scripts\GenericUnitBehavior.cs" />
+     <Compile Include="Assets\Scripts\PlayerScript.cs" />
+     <Compile Include="Assets\Scripts\ResourcePointScript.cs" />
+     <Compile Include="Assets\Scripts\RespawnScript.cs" />
+     <Compile Include="Assets\Scripts\TestCollision.cs" />
+     <Compile Include="Assets\Scripts\TitleScreenHandler.cs" />
+     <Compile Include="Assets\Scripts\UnitResourcePointBehavior.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

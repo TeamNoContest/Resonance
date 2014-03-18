@@ -5,7 +5,6 @@ public class GUIScript : MonoBehaviour
 {
 	GameObject gcProp;
 	GameController gcScript;
-	int interceptorCost, freighterCost, resonatorCost;
 	int resourceCurrent, resourceGoal;
 	float timeCurrent, timeGoal;
 
@@ -16,9 +15,6 @@ public class GUIScript : MonoBehaviour
 	{
 		gcProp = GameObject.Find("Game Controller Prop");
 		gcScript = gcProp.GetComponent<GameController>();
-		interceptorCost = gcScript.GetUnitCosts()[0];
-		freighterCost = gcScript.GetUnitCosts()[1];
-		resonatorCost = gcScript.GetUnitCosts()[2];
 	}
 
 	void Update()
@@ -62,7 +58,7 @@ public class GUIScript : MonoBehaviour
 		#endregion
 
 		#region Unit Spawn Window
-		if(Input.GetKey(KeyCode.LeftShift))
+		if(Input.GetButton("Spawn Menu"))
 		{
 			GUI.Window(0, new Rect(Screen.width - 200, Screen.height - 200, 200, 200), UnitSpawnWindow, "Unit Spawn");
 
@@ -88,7 +84,7 @@ public class GUIScript : MonoBehaviour
 		#region Display Restart Button
 		if(GUI.Button(new Rect(10, Screen.height - 85, 75, 75), "Restart"))
 		{
-			Application.LoadLevel(0);
+			Application.LoadLevel(1);
 		}
 		#endregion
 	}
@@ -97,12 +93,12 @@ public class GUIScript : MonoBehaviour
 	{
 		GUI.Label(new Rect(10, 40, 70, 30), "1");
 		GUI.Label(new Rect(50, 40, 70, 30), "Interceptor");
-		GUI.Label(new Rect(130, 40, 70, 30), interceptorCost.ToString());
+		GUI.Label(new Rect(130, 40, 70, 30), gcScript.GetUnitCosts()[0].ToString());
 		GUI.Label(new Rect(10, 100, 70, 30), "2");
 		GUI.Label(new Rect(50, 100, 70, 30), "Freighter");
-		GUI.Label(new Rect(130, 100, 70, 30), freighterCost.ToString());
+		GUI.Label(new Rect(130, 100, 70, 30), gcScript.GetUnitCosts()[1].ToString());
 		GUI.Label(new Rect(10, 160, 70, 30), "3");
 		GUI.Label(new Rect(50, 160, 70, 30), "Resonator");
-		GUI.Label(new Rect(130, 160, 70, 30), resonatorCost.ToString());
+		GUI.Label(new Rect(130, 160, 70, 30), gcScript.GetUnitCosts()[2].ToString());
 	}
 }

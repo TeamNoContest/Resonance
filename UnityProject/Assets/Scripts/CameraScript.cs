@@ -31,18 +31,18 @@ public class CameraScript : MonoBehaviour
 		transform.position = target.position - transform.forward * distanceFromPlayer;
 
 		#region Rotation
-		if(Input.GetKey(KeyCode.Q) || Input.GetAxis("RightStick Horizontal") > 0)
+		if(Input.GetAxis("Camera Horizontal") > 0)
 		{
 			transform.RotateAround(target.position, Vector3.up, 40 * Time.deltaTime);
 		}
-		else if(Input.GetKey(KeyCode.E) || Input.GetAxis("RightStick Horizontal") < 0)
+		else if(Input.GetAxis("Camera Horizontal") < 0)
 		{
 			transform.RotateAround(target.position, -Vector3.up, 40 * Time.deltaTime);
 		}
 		#endregion
 
 		#region Zoom
-		if(Input.GetKey(KeyCode.Alpha9) || Input.GetAxis("RightStick Vertical") > 0)
+		if(Input.GetAxis("Camera Vertical") > 0)
 		{
 			if(Vector3.Distance(transform.position, target.position) <= MAX_ZOOM_DISTANCE)
 			{
@@ -50,7 +50,7 @@ public class CameraScript : MonoBehaviour
 				distanceFromPlayer++;
 			}
 		}
-		else if(Input.GetKey(KeyCode.Alpha0) || Input.GetAxis("RightStick Vertical") < 0)
+		else if(Input.GetAxis("Camera Vertical") < 0)
 		{
 			if(Vector3.Distance(transform.position, target.position) >= MIN_ZOOM_DISTANCE)
 			{

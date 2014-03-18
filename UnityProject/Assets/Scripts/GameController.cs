@@ -16,9 +16,9 @@ public class GameController : MonoBehaviour
 	float interestTime;		// The amount of time in seconds between interest awards
 	int unitCount;			// Current number of units under player control
 	int unitCap;			// Maximum number of units available to purchase
-	int interceptorCost;	// Cost in resources to create a new Interceptor
-	int freighterCost;		// Cost in resources to create a new Freighter
-	int resonatorCost;		// Cost in resources to create a new Resonator
+	public int interceptorCost;	// Cost in resources to create a new Interceptor
+	public int freighterCost;		// Cost in resources to create a new Freighter
+	public int resonatorCost;		// Cost in resources to create a new Resonator
 
 	// Variables to hold the unit prefabs for the purpose of spawning new units
 	public GameObject interceptorPrefab, freighterPrefab, resonatorPrefab;
@@ -110,12 +110,15 @@ public class GameController : MonoBehaviour
 		{
 		case "interceptor":
 			Instantiate(interceptorPrefab, player.transform.position, Quaternion.identity);
+			resourceCurrent -= interceptorCost;
 			break;
 		case "freighter":
 			Instantiate(freighterPrefab, player.transform.position, Quaternion.identity);
+			resourceCurrent -= freighterCost;
 			break;
 		case "resonator":
 			Instantiate(resonatorPrefab, player.transform.position, Quaternion.identity);
+			resourceCurrent -= resonatorCost;
 			break;
 		default:
 			break;
