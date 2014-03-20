@@ -11,19 +11,13 @@ Platform assembly: C:\Users\JDCAce\Documents\GitHub\ResonanceReaper\UnityProject
 Loading C:\Users\JDCAce\Documents\GitHub\ResonanceReaper\UnityProject\DemoBuild_Data\Managed\UnityEngine.dll into Unity Child Domain
 Platform assembly: C:\Users\JDCAce\Documents\GitHub\ResonanceReaper\UnityProject\DemoBuild_Data\Managed\Assembly-CSharp.dll (this message is harmless)
 Loading C:\Users\JDCAce\Documents\GitHub\ResonanceReaper\UnityProject\DemoBuild_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-- Completed reload, in  0.045 seconds
+- Completed reload, in  0.089 seconds
 desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
-UnloadTime: 13.161379 ms
-Unloading 3 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+UnloadTime: 0.303948 ms
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
-Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 331.
-Total: 3.683702 ms (FindLiveObjects: 0.034342 ms CreateObjectMapping: 0.018947 ms MarkObjects: 2.222773 ms  DeleteObjects: 0.013421 ms)
-
-UnloadTime: 1.138821 ms
-Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
-
-Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 279.
-Total: 3.660017 ms (FindLiveObjects: 0.028815 ms CreateObjectMapping: 0.018947 ms MarkObjects: 2.449354 ms  DeleteObjects: 0.012631 ms)
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 235.
+Total: 1.275795 ms (FindLiveObjects: 0.020921 ms CreateObjectMapping: 0.010657 ms MarkObjects: 0.655661 ms  DeleteObjects: 0.039473 ms)
 

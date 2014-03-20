@@ -63,15 +63,15 @@ public class GUIScript : MonoBehaviour
 			GUI.Window(0, new Rect(Screen.width - 200, Screen.height - 200, 200, 200), UnitSpawnWindow, "Unit Spawn");
 
 			string unitToSpawn = "";
-			if(Input.GetKeyDown(KeyCode.Alpha1))
+			if(Input.GetButton("Fire1"))
 			{
 				unitToSpawn = "interceptor";
 			}
-			else if(Input.GetKeyDown(KeyCode.Alpha2))
+			else if(Input.GetButton("Fire2"))
 			{
 				unitToSpawn = "freighter";
 			}
-			else if(Input.GetKeyDown(KeyCode.Alpha3))
+			else if(Input.GetButton("Fire3"))
 			{
 				unitToSpawn = "resonator";
 			}
