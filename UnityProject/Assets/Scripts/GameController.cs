@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-enum GameMode { TimeLimit };
+public enum GameMode { TIME_LIMIT };
+public enum RunState { RUNNING, PAUSED };
 
 public class GameController : MonoBehaviour
 {
@@ -16,7 +17,9 @@ public class GameController : MonoBehaviour
 	float interestTime;		// The amount of time in seconds between interest awards
 	int unitCount;			// Current number of units under player control
 	int unitCap;			// Maximum number of units available to purchase
-	public int interceptorCost;	// Cost in resources to create a new Interceptor
+
+	public RunState runState;		// Used to mark the game as paused or running
+	public int interceptorCost;		// Cost in resources to create a new Interceptor
 	public int freighterCost;		// Cost in resources to create a new Freighter
 	public int resonatorCost;		// Cost in resources to create a new Resonator
 
@@ -29,7 +32,8 @@ public class GameController : MonoBehaviour
 
 	void Start()
 	{
-		gameMode = GameMode.TimeLimit;
+		gameMode = GameMode.TIME_LIMIT;
+		runState = RunState.RUNNING;
 		resourceCurrent = 100;
 		resourceGoal = 1000;
 		timeCurrent = 0f;
@@ -70,6 +74,23 @@ public class GameController : MonoBehaviour
 		{
 			resourceCurrent = (int)playerScript.ResourceLoad;
 		}
+
+		// Check for pause input
+		if(Input.GetButtonDown("Start"))
+		{
+			if(runState == RunState.RUNNING)
+			{
+				Time.timeScale = 0;
+				runState = RunState.PAUSED;
+				//show screen
+			}
+			else if(runState == RunState.PAUSED)
+			{
+				//diable screen
+				Time.timeScale = 1;
+				runState = RunState.RUNNING;
+			}
+		}
 	}
 
 	void LateUpdate()
@@ -91,7 +112,7 @@ public class GameController : MonoBehaviour
 	/// </summary>
 	void CheckWinLoss()
 	{
-		if(gameMode == GameMode.TimeLimit)
+		if(gameMode == GameMode.TIME_LIMIT)
 		{
 			if(resourceCurrent >= resourceGoal)
 			{
