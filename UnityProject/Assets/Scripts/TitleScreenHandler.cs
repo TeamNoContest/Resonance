@@ -66,10 +66,16 @@ public class TitleScreenHandler : MonoBehaviour
 			switch(currentSelection.name)
 			{
 			case "Play Text":
+
 				Application.LoadLevel(1);
 				break;
 			case "Quit Text":
 				Application.Quit();
+				break;
+			case "Resume Text":
+				break;
+			case "Main Menu Text":
+				Application.LoadLevel(0);
 				break;
 			default:
 				break;

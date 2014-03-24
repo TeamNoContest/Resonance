@@ -73,7 +73,14 @@ public class GenericUnitBehavior : MonoBehaviour
 	void Start ()
 	{
 		if (shipType == null) {shipType = ShipType.Node;} //Defaults to Node only if a type is not selected.
-		if (shipType == ShipType.Alpha) {theGameControllerScript = theGameController.GetComponent<GameController>();}
+		//if (shipType == ShipType.Alpha) {theGameControllerScript = theGameController.GetComponent<GameController>();}
+
+		// NOTE FROM JARED:
+		// I commented out the line above and took this out of the 'if' statement.
+		// I need access to this script so I can detect if the game is paused.
+		// (Refer to the OnGUI method.)
+		theGameController = GameObject.Find("Game Controller Prop");
+		theGameControllerScript = theGameController.GetComponent<GameController>();
 
 		playingArea = GameObject.FindGameObjectWithTag("PlayingArea");
 
@@ -236,7 +243,9 @@ public class GenericUnitBehavior : MonoBehaviour
 		case ShipType.Alpha:
 		{
 			//Only the player gains interest and communicates with the GameController.
-			if (theGameControllerScript != null)
+			// Commented out your if and put it mine, since now theGameControllerScript is never null. - Jared
+			//if (theGameControllerScript != null)
+			if(gameObject.tag == "Player")
 			{
 				//Update the interest from the GameController.
 				interestRate = theGameControllerScript.GetInterestRate();
@@ -289,8 +298,12 @@ public class GenericUnitBehavior : MonoBehaviour
 	//Credit to Jared Cerbin for coming up with this GUI stuff.
 	void OnGUI()
 	{
-		Vector2 labelPos = Camera.main.WorldToScreenPoint(transform.position);
-		GUI.Label(new Rect(labelPos.x, Screen.height - labelPos.y - 30, 50, 20), ResourceLoad.ToString("F0")); //I did a slight tweak to not draw the decimial portion of the resource thinger. - Moore
+		// Display the GUI only if the game is running (not paused). Take this out of the 'if' to see why.
+		if(theGameControllerScript.runState == RunState.RUNNING)
+		{
+			Vector2 labelPos = Camera.main.WorldToScreenPoint(transform.position);
+			GUI.Label(new Rect(labelPos.x, Screen.height - labelPos.y - 30, 50, 20), ResourceLoad.ToString("F0")); //I did a slight tweak to not draw the decimial portion of the resource thinger. - Moore
+		}
 	}
 
 	//Event Methods - End

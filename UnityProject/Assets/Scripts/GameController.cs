@@ -26,6 +26,9 @@ public class GameController : MonoBehaviour
 	// Variables to hold the unit prefabs for the purpose of spawning new units
 	public GameObject interceptorPrefab, freighterPrefab, resonatorPrefab;
 
+	// Variable to hold the Menu Screen objects
+	public GameObject menuObjectsRoot;
+
 	//I realize I shouldn't directly manipulate your code, but this is done to have the always up-to-date value from the player/mothership. - Moore
 	GameObject player;
 	GenericUnitBehavior playerScript;
@@ -82,11 +85,11 @@ public class GameController : MonoBehaviour
 			{
 				Time.timeScale = 0;
 				runState = RunState.PAUSED;
-				//show screen
+				menuObjectsRoot.SetActive(true);
 			}
 			else if(runState == RunState.PAUSED)
 			{
-				//diable screen
+				menuObjectsRoot.SetActive(false);
 				Time.timeScale = 1;
 				runState = RunState.RUNNING;
 			}

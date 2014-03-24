@@ -27,65 +27,69 @@ public class GUIScript : MonoBehaviour
 
 	void OnGUI()
 	{
-		#region Display Time
-		// If the game mode does not have a time goal...
-		if(timeGoal < 0)
+		if(gcScript.runState == RunState.RUNNING)
 		{
-			//...display time elapsed
-			GUI.Label(new Rect(10, 10, 175, 50), "Time Elapsed: " + timeCurrent);
-		}
-		else
-		{
-			//...else display time remaining
-			GUI.Label(new Rect(10, 10, 175, 50), "Time Remaining: " + (timeGoal - timeCurrent));
-		}
-		#endregion
-
-		#region Display Resources
-		// If the game mode does not have a resource goal...
-		if(resourceGoal < 0)
-		{
-			//...display only current resources
-			GUI.Label(new Rect(Screen.width - 150, 10, 150, 50),
-			          "Resources: " + resourceCurrent);
-		}
-		else
-		{
-			//...else display current resources and resource goal
-			GUI.Label(new Rect(Screen.width - 150, 10, 150, 50),
-			          "Resources: " + resourceCurrent + "/" + resourceGoal);
-		}
-		#endregion
-
-		#region Unit Spawn Window
-		if(Input.GetButton("Spawn Menu"))
-		{
-			GUI.Window(0, new Rect(Screen.width - 200, Screen.height - 200, 200, 200), UnitSpawnWindow, "Unit Spawn");
-
-			string unitToSpawn = "";
-			if(Input.GetButton("Fire1"))
+			#region Display Time
+			// If the game mode does not have a time goal...
+			if(timeGoal < 0)
 			{
-				unitToSpawn = "interceptor";
+				//...display time elapsed
+				GUI.Label(new Rect(10, 10, 175, 50), "Time Elapsed: " + timeCurrent);
 			}
-			else if(Input.GetButton("Fire2"))
+			else
 			{
-				unitToSpawn = "freighter";
+				//...else display time remaining
+				GUI.Label(new Rect(10, 10, 175, 50), "Time Remaining: " + (timeGoal - timeCurrent));
 			}
-			else if(Input.GetButton("Fire3"))
-			{
-				unitToSpawn = "resonator";
-			}
+			#endregion
 
-			Spawn(unitToSpawn);
-			// Trigger event and pass unitToSpawn
+			#region Display Resources
+			// If the game mode does not have a resource goal...
+			if(resourceGoal < 0)
+			{
+				//...display only current resources
+				GUI.Label(new Rect(Screen.width - 150, 10, 150, 50),
+				          "Resources: " + resourceCurrent);
+			}
+			else
+			{
+				//...else display current resources and resource goal
+				GUI.Label(new Rect(Screen.width - 150, 10, 150, 50),
+				          "Resources: " + resourceCurrent + "/" + resourceGoal);
+			}
+			#endregion
+
+			#region Unit Spawn Window
+			if(Input.GetButton("Spawn Menu"))
+			{
+				GUI.Window(0, new Rect(Screen.width - 200, Screen.height - 200, 200, 200), UnitSpawnWindow, "Unit Spawn");
+
+				string unitToSpawn = "";
+				if(Input.GetButtonDown("Fire1"))
+				{
+					unitToSpawn = "interceptor";
+				}
+				else if(Input.GetButtonDown("Fire2"))
+				{
+					unitToSpawn = "freighter";
+				}
+				else if(Input.GetButtonDown("Fire3"))
+				{
+					unitToSpawn = "resonator";
+				}
+
+				Spawn(unitToSpawn);
+				// Trigger event and pass unitToSpawn
+			}
+			#endregion
 		}
-		#endregion
 
 		#region Display Restart Button
-		if(GUI.Button(new Rect(10, Screen.height - 85, 75, 75), "Restart"))
+		/*if(GUI.Button(new Rect(10, Screen.height - 85, 75, 75), "Restart"))
 		{
 			Application.LoadLevel("DefaultTestingScene");
 		}
+		*/
 		#endregion
 	}
 
