@@ -56,6 +56,7 @@
      <Compile Include="Assets\Scripts\PlayerScript.cs" />
      <Compile Include="Assets\Scripts\ResourcePointScript.cs" />
      <Compile Include="Assets\Scripts\RespawnScript.cs" />
+     <Compile Include="Assets\Scripts\StatusIndicatorBehavior.cs" />
      <Compile Include="Assets\Scripts\TestCollision.cs" />
      <Compile Include="Assets\Scripts\TitleScreenHandler.cs" />
      <Compile Include="Assets\Scripts\UnitResourcePointBehavior.cs" />
