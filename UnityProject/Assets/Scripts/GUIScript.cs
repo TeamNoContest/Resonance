@@ -7,14 +7,23 @@ public class GUIScript : MonoBehaviour
 	GameController gcScript;
 	int resourceCurrent, resourceGoal;
 	float timeCurrent, timeGoal;
-
-	public delegate void SpawnUnit(string unit);
-	public static event SpawnUnit Spawn;
+	bool isPaused;
 
 	void Start()
 	{
 		gcProp = GameObject.Find("Game Controller Prop");
 		gcScript = gcProp.GetComponent<GameController>();
+		isPaused = false;
+	}
+
+	void OnEnable()
+	{
+		GameController.OnPause += HandleOnPause;
+	}
+
+	void OnDisable()
+	{
+		GameController.OnPause += HandleOnPause;
 	}
 
 	void Update()
@@ -27,7 +36,7 @@ public class GUIScript : MonoBehaviour
 
 	void OnGUI()
 	{
-		if(gcScript.runState == RunState.RUNNING)
+		if(!isPaused)
 		{
 			#region Display Time
 			// If the game mode does not have a time goal...
@@ -58,51 +67,18 @@ public class GUIScript : MonoBehaviour
 				          "Resources: " + resourceCurrent + "/" + resourceGoal);
 			}
 			#endregion
-
-			#region Unit Spawn Window
-			if(Input.GetButton("Spawn Menu"))
-			{
-				GUI.Window(0, new Rect(Screen.width - 200, Screen.height - 200, 200, 200), UnitSpawnWindow, "Unit Spawn");
-
-				string unitToSpawn = "";
-				if(Input.GetButtonDown("Fire1"))
-				{
-					unitToSpawn = "interceptor";
-				}
-				else if(Input.GetButtonDown("Fire2"))
-				{
-					unitToSpawn = "freighter";
-				}
-				else if(Input.GetButtonDown("Fire3"))
-				{
-					unitToSpawn = "resonator";
-				}
-
-				Spawn(unitToSpawn);
-				// Trigger event and pass unitToSpawn
-			}
-			#endregion
 		}
 
 		#region Display Restart Button
 		/*if(GUI.Button(new Rect(10, Screen.height - 85, 75, 75), "Restart"))
 		{
 			Application.LoadLevel("DefaultTestingScene");
-		}
-		*/
+		}*/
 		#endregion
 	}
 
-	void UnitSpawnWindow(int windowID)
+	void HandleOnPause(bool flag)
 	{
-		GUI.Label(new Rect(10, 40, 70, 30), "1");
-		GUI.Label(new Rect(50, 40, 70, 30), "Interceptor");
-		GUI.Label(new Rect(130, 40, 70, 30), gcScript.GetUnitCosts()[0].ToString());
-		GUI.Label(new Rect(10, 100, 70, 30), "2");
-		GUI.Label(new Rect(50, 100, 70, 30), "Freighter");
-		GUI.Label(new Rect(130, 100, 70, 30), gcScript.GetUnitCosts()[1].ToString());
-		GUI.Label(new Rect(10, 160, 70, 30), "3");
-		GUI.Label(new Rect(50, 160, 70, 30), "Resonator");
-		GUI.Label(new Rect(130, 160, 70, 30), gcScript.GetUnitCosts()[2].ToString());
+		isPaused = flag;
 	}
 }

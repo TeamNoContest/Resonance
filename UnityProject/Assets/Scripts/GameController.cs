@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿// This script must be put on the same GameObject as UnitSpawn.cs.
+
+using UnityEngine;
 using System.Collections;
 
 public enum GameMode { TIME_LIMIT };
@@ -28,6 +30,10 @@ public class GameController : MonoBehaviour
 
 	// Variable to hold the Menu Screen objects
 	public GameObject menuObjectsRoot;
+
+	// Used for calling the OnPause event. The flag indicates whether the game is being paused (true) or unpaused (false).
+	public delegate void PauseEventHandler(bool flag);
+	public static event PauseEventHandler OnPause;
 
 	//I realize I shouldn't directly manipulate your code, but this is done to have the always up-to-date value from the player/mothership. - Moore
 	GameObject player;
@@ -60,12 +66,12 @@ public class GameController : MonoBehaviour
 
 	void OnEnable()
 	{
-		GUIScript.Spawn += SpawnUnit;
+		UnitSpawn.Spawn += SpawnUnit;
 	}
 
 	void OnDisable()
 	{
-		GUIScript.Spawn -= SpawnUnit;
+		UnitSpawn.Spawn -= SpawnUnit;
 	}
 
 	void Update()
@@ -86,12 +92,14 @@ public class GameController : MonoBehaviour
 				Time.timeScale = 0;
 				runState = RunState.PAUSED;
 				menuObjectsRoot.SetActive(true);
+				OnPause(true);
 			}
 			else if(runState == RunState.PAUSED)
 			{
 				menuObjectsRoot.SetActive(false);
 				Time.timeScale = 1;
 				runState = RunState.RUNNING;
+				OnPause(false);
 			}
 		}
 	}
