@@ -10,12 +10,14 @@ If you have Unity 4.3.4 installed, you can open the Unity Project folder with Un
 ## Keyboard
 * **Zoom in / Zoom out** - 9 key / 0 key
 * **Rotate Camera Around Player** - Q key / E key
-* **Movement** - W,A,S,D keys
-* **Unit Spawning** - Left shift + alpha-number key
+* **Movement** - W, A, S, or D key
+* **Unit Spawning** - Left shift + (N, J, or H) key
+* **Select** - N key
 * **Toggle Fullscreen** - Alt + Enter
 
 ## Xbox Controller
 * **Zoom in / Zoom out** - Right analog stick up/down
 * **Rotate Camera Around Player** - Right analog stick left/right
 * **Movement** - Left analog stick
-* **Unit Spawning** - (Planned, not implemented) Right bumper + face button
+* **Unit Spawning** - Right bumper + (A, B, or X) button
+* **Select** - A button
