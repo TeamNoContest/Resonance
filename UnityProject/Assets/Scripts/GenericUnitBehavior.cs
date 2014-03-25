@@ -54,6 +54,8 @@ public class GenericUnitBehavior : MonoBehaviour
 
 	protected const float distanceTreshold = 20.0f;
 
+	private bool isPaused;
+
 	public GameObject target;
 	public GameObject altTarget;
 	public GameObject playingArea;
@@ -68,19 +70,28 @@ public class GenericUnitBehavior : MonoBehaviour
 	protected GameController theGameControllerScript;
 
 	//Event Methods - Start
+	void OnEnable()
+	{
+		GameController.OnPause += HandleOnPause;
+	}
+
+	void OnDisable()
+	{
+		GameController.OnPause += HandleOnPause;
+	}
 
 	// Use this for initialization
 	void Start ()
 	{
 		if (shipType == null) {shipType = ShipType.Node;} //Defaults to Node only if a type is not selected.
-		//if (shipType == ShipType.Alpha) {theGameControllerScript = theGameController.GetComponent<GameController>();}
+		if (shipType == ShipType.Alpha) {theGameControllerScript = theGameController.GetComponent<GameController>();}
 
 		// NOTE FROM JARED:
 		// I commented out the line above and took this out of the 'if' statement.
 		// I need access to this script so I can detect if the game is paused.
 		// (Refer to the OnGUI method.)
-		theGameController = GameObject.Find("Game Controller Prop");
-		theGameControllerScript = theGameController.GetComponent<GameController>();
+		//theGameController = GameObject.Find("Game Controller Prop");
+		//theGameControllerScript = theGameController.GetComponent<GameController>();
 
 		playingArea = GameObject.FindGameObjectWithTag("PlayingArea");
 
@@ -93,6 +104,8 @@ public class GenericUnitBehavior : MonoBehaviour
 		rateModifer = 1.0f;
 
 		interestRate = 0.005f; //Reminder: This will be overwritten each update by the value in the Game Controller. - Moore
+
+		isPaused = false;
 
 		//TODO: Use a switch case here to vary up the starting stats based on whatever shipType this unit is.
 		switch (shipType)
@@ -243,9 +256,7 @@ public class GenericUnitBehavior : MonoBehaviour
 		case ShipType.Alpha:
 		{
 			//Only the player gains interest and communicates with the GameController.
-			// Commented out your if and put it mine, since now theGameControllerScript is never null. - Jared
-			//if (theGameControllerScript != null)
-			if(gameObject.tag == "Player")
+			if (theGameControllerScript != null)
 			{
 				//Update the interest from the GameController.
 				interestRate = theGameControllerScript.GetInterestRate();
@@ -299,7 +310,7 @@ public class GenericUnitBehavior : MonoBehaviour
 	void OnGUI()
 	{
 		// Display the GUI only if the game is running (not paused). Take this out of the 'if' to see why.
-		if(theGameControllerScript.runState == RunState.RUNNING)
+		if(!isPaused)
 		{
 			Vector2 labelPos = Camera.main.WorldToScreenPoint(transform.position);
 			GUI.Label(new Rect(labelPos.x, Screen.height - labelPos.y - 30, 50, 20), ResourceLoad.ToString("F0")); //I did a slight tweak to not draw the decimial portion of the resource thinger. - Moore
@@ -462,5 +473,9 @@ public class GenericUnitBehavior : MonoBehaviour
 		return new Vector3(tempX, tempY, tempZ);
 	}
 
+	void HandleOnPause(bool flag)
+	{
+		isPaused = flag;
+	}
 	//Utility Methods - end
 }
