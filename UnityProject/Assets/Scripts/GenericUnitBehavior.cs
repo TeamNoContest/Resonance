@@ -309,7 +309,7 @@ public class GenericUnitBehavior : MonoBehaviour
 	//Credit to Jared Cerbin for coming up with this GUI stuff.
 	void OnGUI()
 	{
-		// Display the GUI only if the game is running (not paused). Take this out of the 'if' to see why.
+		// Display the GUI only if the game is not paused. Take this out of the 'if' to see why. - Jared
 		if(!isPaused)
 		{
 			Vector2 labelPos = Camera.main.WorldToScreenPoint(transform.position);
@@ -473,6 +473,7 @@ public class GenericUnitBehavior : MonoBehaviour
 		return new Vector3(tempX, tempY, tempZ);
 	}
 
+	// This is the class that handles the OnPause event, which is broadcast by GameController whenever the RunState changes.
 	void HandleOnPause(bool flag)
 	{
 		isPaused = flag;
