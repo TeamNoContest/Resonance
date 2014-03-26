@@ -453,7 +453,11 @@ public class GenericUnitBehavior : MonoBehaviour
             transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
             if (IsNotWithinDistanceThreshold(destination))
             { //4:23 Defect - Had the < intstead of >.
-                transform.position += (transform.forward * movementSpeed * rateModifier * Time.deltaTime);
+                //transform.position += (transform.forward * movementSpeed * rateModifier * Time.deltaTime);
+
+				//Changing this ^^ to use rigidbodies and forces instead to allow for less weird overlapping stuff. - Moore.
+
+				rigidbody.AddForce(transform.forward * movementSpeed * rateModifier * Time.deltaTime); //NOTE: We should only be using *this* version in a fixed update. - Moore.
             }
         }
     }
