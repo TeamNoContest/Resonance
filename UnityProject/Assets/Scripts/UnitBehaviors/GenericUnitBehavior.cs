@@ -37,7 +37,7 @@ public class GenericUnitBehavior : MonoBehaviour
 
     protected float attackRate { get; set; }
 
-    protected float rateModifer { get; set; }
+    protected float rateModifier { get; set; }
 
     protected float movementSpeed { get; set; }
 
@@ -99,7 +99,7 @@ public class GenericUnitBehavior : MonoBehaviour
         resourceCapacity = 600.0f;
         ResourceLoad = 500.0f;
         gatheringRate = 2.0f;
-        rateModifer = 1.0f;
+        rateModifier = 1.0f;
 
         interestRate = 0.005f; //Reminder: This will be overwritten each update by the value in the Game Controller. - Moore
 
@@ -307,11 +307,35 @@ public class GenericUnitBehavior : MonoBehaviour
 
     //Accessor/Mutator Methods - Start
 
-    public float ResourceLoad
-    {
-        get { return resourceLoad;} //Accessor
-        set { resourceLoad = value;} //Mutator
-    }
+	public float ResourceLoad
+	{
+		get { return resourceLoad;} //Accessor
+		set { resourceLoad = value;} //Mutator
+	}
+
+	public float MovementSpeed
+	{
+		get { return movementSpeed;} //Accessor
+		set { movementSpeed = value;} //Mutator
+	}
+
+	public float ResourceCapacity
+	{
+		get { return resourceCapacity;} //Accessor
+		set { resourceCapacity = value;} //Mutator
+	}
+
+	public float GatheringRate
+	{
+		get { return gatheringRate;} //Accessor
+		set { gatheringRate = value;} //Mutator
+	}
+
+	public float RateModifier
+	{
+		get { return rateModifier;} //Accessor
+		set { rateModifier = value;} //Mutator
+	}
 
     //Accessor/Mutator Methods - End
 
@@ -353,7 +377,7 @@ public class GenericUnitBehavior : MonoBehaviour
         float amountRequested = 0.0f;
         GenericUnitBehavior gubScript = targetObject.GetComponent<GenericUnitBehavior>();
 
-        amountRequested = gubScript.gatheringRate * gubScript.rateModifer * Time.deltaTime;
+        amountRequested = gubScript.gatheringRate * gubScript.rateModifier * Time.deltaTime;
 
         //Can't draw more than the capacity. - Moore
         if (gubScript.resourceCapacity < 0.0f)
@@ -429,7 +453,7 @@ public class GenericUnitBehavior : MonoBehaviour
             transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
             if (IsNotWithinDistanceThreshold(destination))
             { //4:23 Defect - Had the < intstead of >.
-                transform.position += (transform.forward * movementSpeed * rateModifer * Time.deltaTime);
+                transform.position += (transform.forward * movementSpeed * rateModifier * Time.deltaTime);
             }
         }
     }

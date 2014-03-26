@@ -52,7 +52,6 @@
      <Compile Include="Assets\Scripts\ExpandandSelect.cs" />
      <Compile Include="Assets\Scripts\GUIScript.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
-     <Compile Include="Assets\Scripts\GenericUnitBehavior.cs" />
      <Compile Include="Assets\Scripts\MusicPlayer.cs" />
      <Compile Include="Assets\Scripts\PlayerScript.cs" />
      <Compile Include="Assets\Scripts\ResourcePointScript.cs" />
@@ -62,6 +61,8 @@
      <Compile Include="Assets\Scripts\SuperclassTest.cs" />
      <Compile Include="Assets\Scripts\TestCollision.cs" />
      <Compile Include="Assets\Scripts\TitleScreenHandler.cs" />
+     <Compile Include="Assets\Scripts\UnitBehaviors\GenericUnitBehavior.cs" />
+     <Compile Include="Assets\Scripts\UnitBehaviors\ResonatorUnitBehavior.cs" />
      <Compile Include="Assets\Scripts\UnitResourcePointBehavior.cs" />
      <Compile Include="Assets\Scripts\UnitSpawn.cs" />
   </ItemGroup>
