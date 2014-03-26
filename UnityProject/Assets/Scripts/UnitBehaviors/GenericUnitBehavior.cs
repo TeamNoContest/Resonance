@@ -457,12 +457,12 @@ public class GenericUnitBehavior : MonoBehaviour
 
 				//Changing this ^^ to use rigidbodies and forces instead to allow for less weird overlapping stuff. - Moore.
 
-				rigidbody.AddForce(transform.forward * movementSpeed * rateModifier * Time.deltaTime); //NOTE: We should only be using *this* version in a fixed update. - Moore.
+				rigidbody.AddForce(transform.forward * movementSpeed * rateModifier * Time.deltaTime, ForceMode.Impulse); //NOTE: We should only be using *this* version in a fixed update. - Moore.
             }
         }
     }
 
-    protected bool IsWithinDistanceThreshold(GameObject destination)
+    protected bool IsWithinDistanceThreshold(GameObject destination) //TODO: Change this to factor in rigidbody.velocity so that it slows down before reaching destination. Alternatively, make a new method to do exactly that. - Moore
     {
         bool result = false;
 
