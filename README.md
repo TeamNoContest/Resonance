@@ -21,3 +21,11 @@ If you have Unity 4.3.4 installed, you can open the Unity Project folder with Un
 * **Movement** - Left analog stick
 * **Unit Spawning** - Right bumper + (A, B, or X) button
 * **Select** - A button
+
+# Asset Credits: 
+* **Models** 
+	* The current unit models were created by JDCAce.
+* **Sounds** 
+	* The current squad command audio files were created by JDCAce.
+* **Music**
+	* "Thumper" and "Cool" background music tracks are a part of Midnight Cassette System and can be downloaded for free at [their website](http://mcs.franknora.com/ "Midnight Cassette System Open Source Music").  It's available under the Creative Commons Zero license, which can be read [here](http://creativecommons.org/publicdomain/zero/1.0/ "The Creative Commons Zero license"). 

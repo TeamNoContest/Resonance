@@ -114,7 +114,7 @@ public class GenericUnitBehavior : MonoBehaviour
                     attackRate = 0.0f;
                     movementSpeed = 15.0f;
                     resourceCapacity = -1.0f;
-                    ResourceLoad = 1400.0f;
+                    ResourceLoad = 10.0f;
                     integrity = 100.0f;
                     break;
                 }
