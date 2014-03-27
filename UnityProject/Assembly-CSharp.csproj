@@ -49,11 +49,10 @@
      <Compile Include="Assets\Scripts\CameraPlayerTracker.cs" />
      <Compile Include="Assets\Scripts\CameraScript.cs" />
      <Compile Include="Assets\Scripts\ChaserScript.cs" />
-     <Compile Include="Assets\Scripts\ExpandandSelect.cs" />
      <Compile Include="Assets\Scripts\GUIScript.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
      <Compile Include="Assets\Scripts\MusicPlayer.cs" />
-     <Compile Include="Assets\Scripts\PlayerScript.cs" />
+     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\ResourcePointScript.cs" />
      <Compile Include="Assets\Scripts\RespawnScript.cs" />
      <Compile Include="Assets\Scripts\StatusIndicatorBehavior.cs" />
@@ -64,6 +63,7 @@
      <Compile Include="Assets\Scripts\UnitBehaviors\GenericUnitBehavior.cs" />
      <Compile Include="Assets\Scripts\UnitBehaviors\ResonatorUnitBehavior.cs" />
      <Compile Include="Assets\Scripts\UnitResourcePointBehavior.cs" />
+     <Compile Include="Assets\Scripts\UnitSelection.cs" />
      <Compile Include="Assets\Scripts\UnitSpawn.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

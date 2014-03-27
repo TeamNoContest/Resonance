@@ -66,7 +66,7 @@ public class TitleScreenHandler : MonoBehaviour
 			switch(currentSelection.name)
 			{
 			case "Play Text":
-
+				Time.timeScale = 1;
 				Application.LoadLevel(1);
 				break;
 			case "Quit Text":

@@ -7,6 +7,8 @@ public class UnitSpawn : MonoBehaviour
 {
 	GameController gcScript;
 	bool isPaused;
+	bool isSpawnWindowOpen;
+	int input;
 
 	// Used for calling the Spawn event
 	public delegate void SpawnUnit(string unit);
@@ -16,6 +18,8 @@ public class UnitSpawn : MonoBehaviour
 	{
 		gcScript = gameObject.GetComponent<GameController>();
 		isPaused = false;
+		isSpawnWindowOpen = false;
+		input = 0;
 	}
 
 	void OnEnable()
@@ -28,27 +32,35 @@ public class UnitSpawn : MonoBehaviour
 		GameController.OnPause -= HandleOnPause;
 	}
 
-	void OnGUI()
+	void Update()
 	{
 		if(Input.GetButton("Spawn Menu") && !isPaused)
 		{
-			GUI.Window(0, new Rect(Screen.width - 200, Screen.height - 200, 200, 200), UnitSpawnWindow, "Unit Spawn");
-			
-			string unitToSpawn = "";
+			isSpawnWindowOpen = true;
 			if(Input.GetButtonDown("Fire1"))
 			{
-				unitToSpawn = "interceptor";
+				Spawn("interceptor");
 			}
 			else if(Input.GetButtonDown("Fire2"))
 			{
-				unitToSpawn = "freighter";
+				Spawn("freighter");
 			}
 			else if(Input.GetButtonDown("Fire3"))
 			{
-				unitToSpawn = "resonator";
+				Spawn("resonator");
 			}
-			
-			Spawn(unitToSpawn);
+		}
+		else
+		{
+			isSpawnWindowOpen = false;
+		}
+	}
+
+	void OnGUI()
+	{
+		if(isSpawnWindowOpen)
+		{
+			GUI.Window(0, new Rect(Screen.width - 200, Screen.height - 200, 200, 200), UnitSpawnWindow, "Unit Spawn");
 		}
 	}
 
