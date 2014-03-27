@@ -178,6 +178,7 @@ public class GenericUnitBehavior : MonoBehaviour
             //If close enough, draw resources from it. If not, then fly closer. - Moore
                 if (IsWithinDistanceThreshold(target))
                 {
+                    ApplyBreaks();
                     GatherResourcesFromSource(target);
                 } else
                 {
@@ -204,6 +205,7 @@ public class GenericUnitBehavior : MonoBehaviour
                 target = FindClosestGameObjectWithTag("Player"); //This had been planned to be a separate ship, but now it refers to the player. - Moore
                 if (IsWithinDistanceThreshold(target))
                 {
+                    ApplyBreaks();
                     TransferResourcesToSource(target); //If you're close enough to the player, drop off your resources until you're empty. - Moore
                 } else
                 {
@@ -231,6 +233,7 @@ public class GenericUnitBehavior : MonoBehaviour
 
                 if (IsWithinDistanceThreshold(target))
                 {
+                    ApplyBreaks();
                     TransferResourcesToSource(target); //If you're close enough to the player, drop off your resources until you're empty. - Moore
                 } else
                 {
@@ -307,35 +310,35 @@ public class GenericUnitBehavior : MonoBehaviour
 
     //Accessor/Mutator Methods - Start
 
-	public float ResourceLoad
-	{
-		get { return resourceLoad;} //Accessor
-		set { resourceLoad = value;} //Mutator
-	}
+    public float ResourceLoad
+    {
+        get { return resourceLoad;} //Accessor
+        set { resourceLoad = value;} //Mutator
+    }
 
-	public float MovementSpeed
-	{
-		get { return movementSpeed;} //Accessor
-		set { movementSpeed = value;} //Mutator
-	}
+    public float MovementSpeed
+    {
+        get { return movementSpeed;} //Accessor
+        set { movementSpeed = value;} //Mutator
+    }
 
-	public float ResourceCapacity
-	{
-		get { return resourceCapacity;} //Accessor
-		set { resourceCapacity = value;} //Mutator
-	}
+    public float ResourceCapacity
+    {
+        get { return resourceCapacity;} //Accessor
+        set { resourceCapacity = value;} //Mutator
+    }
 
-	public float GatheringRate
-	{
-		get { return gatheringRate;} //Accessor
-		set { gatheringRate = value;} //Mutator
-	}
+    public float GatheringRate
+    {
+        get { return gatheringRate;} //Accessor
+        set { gatheringRate = value;} //Mutator
+    }
 
-	public float RateModifier
-	{
-		get { return rateModifier;} //Accessor
-		set { rateModifier = value;} //Mutator
-	}
+    public float RateModifier
+    {
+        get { return rateModifier;} //Accessor
+        set { rateModifier = value;} //Mutator
+    }
 
     //Accessor/Mutator Methods - End
 
@@ -453,11 +456,14 @@ public class GenericUnitBehavior : MonoBehaviour
             transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
             if (IsNotWithinDistanceThreshold(destination))
             { //4:23 Defect - Had the < intstead of >.
-                //transform.position += (transform.forward * movementSpeed * rateModifier * Time.deltaTime);
-
-				//Changing this ^^ to use rigidbodies and forces instead to allow for less weird overlapping stuff. - Moore.
-
-				rigidbody.AddForce(transform.forward * movementSpeed * rateModifier * Time.deltaTime, ForceMode.Impulse); //NOTE: We should only be using *this* version in a fixed update. - Moore.
+                if (rigidbody == null)
+                {
+                    transform.position += (transform.forward * movementSpeed * rateModifier * Time.deltaTime);
+                } else
+                {               //Changing this ^^ to use rigidbodies and forces instead to allow for less weird overlapping stuff. - Moore.            
+                    //rigidbody.AddForce (transform.forward * movementSpeed * rateModifier * Time.deltaTime, ForceMode.Impulse); //NOTE: We should only be using *this* version in a fixed update. - Moore.
+                    rigidbody.velocity = transform.forward * movementSpeed * rateModifier * Time.deltaTime;         
+                }       
             }
         }
     }
@@ -475,6 +481,14 @@ public class GenericUnitBehavior : MonoBehaviour
         }
 
         return result;
+    }
+
+    protected void ApplyBreaks()
+    {
+        if (rigidbody != null)
+        {
+            rigidbody.AddForce(-0.5f * rigidbody.velocity);
+        }
     }
 
     //Convenience Negation Wrapper Method for the above:
