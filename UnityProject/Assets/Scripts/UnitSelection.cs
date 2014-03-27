@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class UnitSelection : MonoBehaviour
 {
 	public int listSize = 10;
 	public float sphereIncreaseRate;
 	Vector3 maxScale, defaultScale;
-	public GameObject[] selectedObjectList;
+	//public GameObject[] selectedObjectList; - Tweaked this, because working with arrays can be a pain. Using a generic list instead. - Moore
+    public List<GameObject> selectedObjectList;
 	bool isStartOfSelection;
 
 	public AudioClip[] clipsCommands;
@@ -27,7 +28,7 @@ public class UnitSelection : MonoBehaviour
 	{
 		maxScale = new Vector3(120f, 120f, 120f);
 		defaultScale = transform.localScale;
-		selectedObjectList = new GameObject[listSize];
+		selectedObjectList = new List<GameObject>(listSize);
 	}
 
 	void Update()
@@ -38,6 +39,7 @@ public class UnitSelection : MonoBehaviour
 			if(isStartOfSelection)
 			{
 				audioCommands[Random.Range(0, audioCommands.Length)].Play();
+                ClearList();
 			}
 
 			if(transform.localScale.x < maxScale.x)
@@ -66,4 +68,17 @@ public class UnitSelection : MonoBehaviour
 		tempAudio.clip = clip;
 		return tempAudio;
 	}
+
+    //The following methods manipulate the contents of this object. Mutators, more or less. - Moore
+    public void AddObjectToList( GameObject theObject)
+    {
+        if (selectedObjectList.Count < selectedObjectList.Capacity && !selectedObjectList.Contains(theObject))
+            selectedObjectList.Add(theObject);
+    }
+
+    public void ClearList()
+    {
+        selectedObjectList.Clear();
+    }
+
 }

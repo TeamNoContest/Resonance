@@ -1,8 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\UnitSelection.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\UnitBehaviors\GenericUnitBehavior.cs">
     <Files>
-      <File FileName="Assets\Scripts\UnitSelection.cs" Line="7" Column="34" />
+      <File FileName="Assets\Scripts\UnitSelection.cs" Line="75" Column="72" />
+      <File FileName="Assets\Scripts\UnitBehaviors\GenericUnitBehavior.cs" Line="169" Column="30" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

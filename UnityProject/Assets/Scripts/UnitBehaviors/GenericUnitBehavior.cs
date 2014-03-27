@@ -168,7 +168,7 @@ public class GenericUnitBehavior : MonoBehaviour
 
             case State.FollowPlayer:
                 target = FindClosestGameObjectWithTag("Player");
-                FlyTowardsGameObject(target);
+                FlyTowardsGameObjectWithSmartBraking(target);
                 break;
 
             case State.GatherNearestResourcePoint:
@@ -178,11 +178,10 @@ public class GenericUnitBehavior : MonoBehaviour
             //If close enough, draw resources from it. If not, then fly closer. - Moore
                 if (IsWithinDistanceThreshold(target))
                 {
-                    ApplyBreaks();
                     GatherResourcesFromSource(target);
                 } else
                 {
-                    FlyTowardsGameObject(target);
+                    FlyTowardsGameObjectWithSmartBraking(target);
                 }
 
             //If my resources are maxed out, return to the alpha ship (player) - Moore.
@@ -205,11 +204,10 @@ public class GenericUnitBehavior : MonoBehaviour
                 target = FindClosestGameObjectWithTag("Player"); //This had been planned to be a separate ship, but now it refers to the player. - Moore
                 if (IsWithinDistanceThreshold(target))
                 {
-                    ApplyBreaks();
                     TransferResourcesToSource(target); //If you're close enough to the player, drop off your resources until you're empty. - Moore
                 } else
                 {
-                    FlyTowardsGameObject(target); //If you're not close enough, get closer. - Moore.
+                    FlyTowardsGameObjectWithSmartBraking(target); //If you're not close enough, get closer. - Moore.
                 }
             
             //If no more resources to deposit, go back to the default behavior of following the player.
@@ -233,11 +231,10 @@ public class GenericUnitBehavior : MonoBehaviour
 
                 if (IsWithinDistanceThreshold(target))
                 {
-                    ApplyBreaks();
                     TransferResourcesToSource(target); //If you're close enough to the player, drop off your resources until you're empty. - Moore
                 } else
                 {
-                    FlyTowardsGameObject(target); //If you're not close enough, get closer. - Moore.
+                    FlyTowardsGameObjectWithSmartBraking(target); //If you're not close enough, get closer. - Moore.
                 }
             
             //If no more resources to deposit, go back to the default behavior of following the player.
@@ -303,6 +300,22 @@ public class GenericUnitBehavior : MonoBehaviour
         {
             Vector2 labelPos = Camera.main.WorldToScreenPoint(transform.position);
             GUI.Label(new Rect(labelPos.x, Screen.height - labelPos.y - 30, 50, 20), ResourceLoad.ToString("F0")); //I did a slight tweak to not draw the decimial portion of the resource thinger. - Moore
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        //If the object we're colliding with is a unitSelection bubble... - Moore
+        UnitSelection usScript = other.GetComponent<UnitSelection>();
+        if (usScript != null)
+        {
+            //Then we add ourselves to the selection and start following the player. But only if we're not a player.
+            if (shipType != ShipType.Alpha)
+            {
+                usScript.AddObjectToList(gameObject);
+                state = State.FollowPlayer;
+                UpdateStatusIndicator();
+            }
         }
     }
 
@@ -461,9 +474,36 @@ public class GenericUnitBehavior : MonoBehaviour
                     transform.position += (transform.forward * movementSpeed * rateModifier * Time.deltaTime);
                 } else
                 {               //Changing this ^^ to use rigidbodies and forces instead to allow for less weird overlapping stuff. - Moore.            
-                    //rigidbody.AddForce (transform.forward * movementSpeed * rateModifier * Time.deltaTime, ForceMode.Impulse); //NOTE: We should only be using *this* version in a fixed update. - Moore.
-                    rigidbody.velocity = transform.forward * movementSpeed * rateModifier * Time.deltaTime;         
+                    rigidbody.AddForce(transform.forward * movementSpeed * rateModifier * Time.deltaTime, ForceMode.Impulse); //NOTE: We should only be using *this* version in a fixed update. - Moore.
+                    //rigidbody.velocity = transform.forward * movementSpeed * rateModifier * Time.deltaTime;         
                 }       
+            }
+        }
+    }
+
+    protected void FlyTowardsGameObjectWithSmartBraking(GameObject destination)
+    {
+        //Description: This is very similar to the original FlyTowardsGameObject script, but is intended only for use with GameObjects that have rigid bodies. If it detects that its destination is within breaking distance it will start to slow down. - Moore.
+        //Precondition: You should only be calling this once per caller per update. - Moore
+        if (destination != null)
+        {
+            //Make sure to check that the target is within a desirable distance. So there should be a maximum distance variable. - Moore
+            transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
+            if (IsNotWithinBrakingDistance(destination))
+            { //4:23 Defect - Had the < intstead of >.
+                if (rigidbody != null)
+                {               
+
+                    rigidbody.AddForce(transform.forward * movementSpeed * rateModifier * Time.deltaTime);        
+                }
+                else
+                {
+                    print("The method \"FlyTowardsGameObjectWithSmarkBraking\" was called on an object with no rigidbody. Did you mean to use \"FlyTowardsGameObject\"?");
+                }
+            }
+            else
+            {
+                ApplyBrakes();
             }
         }
     }
@@ -483,18 +523,40 @@ public class GenericUnitBehavior : MonoBehaviour
         return result;
     }
 
-    protected void ApplyBreaks()
+    //Convenience Negation Wrapper Method for the above:
+    protected bool IsNotWithinDistanceThreshold(GameObject destination)
+    {
+        return !IsWithinDistanceThreshold(destination);
+    }
+
+    protected bool IsWithinBrakingDistance(GameObject destination) //TODO: Change this to factor in rigidbody.velocity so that it slows down before reaching destination. Alternatively, make a new method to do exactly that. - Moore
+    {
+        bool result = false;
+        
+        if (Vector3.Distance(transform.position, destination.transform.position) > (distanceTreshold + (rigidbody.velocity.magnitude /* * 2*/)) && rigidbody.velocity.magnitude > 0)
+        { //If it is outside of the threshold...
+            result = false; //Return false. - Moore
+        } else
+        { // Otherwise, return true. - Moore
+            return true;
+        }
+        
+        return result;
+    }
+    
+    //Convenience Negation Wrapper Method for the above:
+    protected bool IsNotWithinBrakingDistance(GameObject destination)
+    {
+        return !IsWithinDistanceThreshold(destination);
+    }
+
+
+    protected void ApplyBrakes()
     {
         if (rigidbody != null)
         {
             rigidbody.AddForce(-0.5f * rigidbody.velocity);
         }
-    }
-
-    //Convenience Negation Wrapper Method for the above:
-    protected bool IsNotWithinDistanceThreshold(GameObject destination)
-    {
-        return !IsWithinDistanceThreshold(destination);
     }
 
     protected GameObject FindClosestGameObjectWithTag(string tagToFind)
