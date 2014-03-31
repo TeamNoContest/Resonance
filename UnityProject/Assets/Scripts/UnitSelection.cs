@@ -57,6 +57,7 @@ public class UnitSelection : MonoBehaviour
 		{
 			transform.localScale = defaultScale;
 			//selectionCollider.radius = defaultRadius;
+
 			// The selection process is over, so reset the "start of selection"
 			isStartOfSelection = true;
 		}
@@ -80,5 +81,4 @@ public class UnitSelection : MonoBehaviour
     {
         selectedObjectList.Clear();
     }
-
 }

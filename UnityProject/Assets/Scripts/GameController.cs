@@ -138,22 +138,26 @@ public class GameController : MonoBehaviour
 
 	void SpawnUnit(string unit)
 	{
-		switch(unit.ToLower())
+		if(unitCount < unitCap)
 		{
-		case "interceptor":
-			Instantiate(interceptorPrefab, player.transform.position, Quaternion.identity);
-			resourceCurrent -= interceptorCost;
-			break;
-		case "freighter":
-			Instantiate(freighterPrefab, player.transform.position, Quaternion.identity);
-			resourceCurrent -= freighterCost;
-			break;
-		case "resonator":
-			Instantiate(resonatorPrefab, player.transform.position, Quaternion.identity);
-			resourceCurrent -= resonatorCost;
-			break;
-		default:
-			break;
+			switch(unit.ToLower())
+			{
+			case "interceptor":
+				Instantiate(interceptorPrefab, player.transform.position, Quaternion.identity);
+				resourceCurrent -= interceptorCost;
+				break;
+			case "freighter":
+				Instantiate(freighterPrefab, player.transform.position, Quaternion.identity);
+				resourceCurrent -= freighterCost;
+				break;
+			case "resonator":
+				Instantiate(resonatorPrefab, player.transform.position, Quaternion.identity);
+				resourceCurrent -= resonatorCost;
+				break;
+			default:
+				break;
+			}
+			unitCount++;
 		}
 	}
 
@@ -177,6 +181,12 @@ public class GameController : MonoBehaviour
 	public int[] GetUnitCosts()
 	{
 		int[] temp = {interceptorCost, freighterCost, resonatorCost};
+		return temp;
+	}
+
+	public int[] GetUnitCountAndCap()
+	{
+		int[] temp = {unitCount, unitCap};
 		return temp;
 	}
 }

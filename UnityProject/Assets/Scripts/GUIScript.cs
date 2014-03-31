@@ -23,7 +23,7 @@ public class GUIScript : MonoBehaviour
 
 	void OnDisable()
 	{
-		GameController.OnPause += HandleOnPause;
+		GameController.OnPause -= HandleOnPause;
 	}
 
 	void Update()
@@ -43,13 +43,17 @@ public class GUIScript : MonoBehaviour
 			if(timeGoal < 0)
 			{
 				//...display time elapsed
-				GUI.Label(new Rect(10, 10, 175, 50), "Time Elapsed: " + timeCurrent);
+				GUI.Label(new Rect(10, 10, 175, 50), "Time Elapsed: " + Mathf.FloorToInt(timeCurrent));
 			}
 			else
 			{
 				//...else display time remaining
-				GUI.Label(new Rect(10, 10, 175, 50), "Time Remaining: " + (timeGoal - timeCurrent));
+				GUI.Label(new Rect(10, 10, 175, 50), "Time Remaining: " + Mathf.FloorToInt(timeGoal - timeCurrent));
 			}
+			#endregion
+
+			#region Display Unit Cap
+			GUI.Label(new Rect(Screen.width / 2 - 25, 10, 100, 50), "Units: " + gcScript.GetUnitCountAndCap()[0] + "/" + gcScript.GetUnitCountAndCap()[1]);
 			#endregion
 
 			#region Display Resources
