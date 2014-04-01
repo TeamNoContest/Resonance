@@ -16,7 +16,7 @@ public class GameController : MonoBehaviour
 	float timeGoal;			// Amount of time alloted for player to win, in seconds;
 							// if negative, game mode doesn't have time goal
 	float interestRate;		// Percentage of curent resources gained per second
-	float interestTime;		// The amount of time in seconds between interest awards
+	//float interestTime;		// The amount of time in seconds between interest awards
 	int unitCount;			// Current number of units under player control
 	int unitCap;			// Maximum number of units available to purchase
 
@@ -48,7 +48,7 @@ public class GameController : MonoBehaviour
 		timeCurrent = 0f;
 		timeGoal = 3600f;	// one hour time limit
 		interestRate = 0.01f; // This basically means a bonus 1 point per second for every 200, or - Moore
-		interestTime = 5f;
+		//interestTime = 5f;
 		unitCount = 0;
 		unitCap = 10;
 		interceptorCost = 1000;

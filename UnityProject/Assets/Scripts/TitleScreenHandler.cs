@@ -28,7 +28,7 @@ public class TitleScreenHandler : MonoBehaviour
 				{
 					currentSelection = menuSelections[--currentIndex];
 				}
-				catch(System.IndexOutOfRangeException e)	// If at the top and trying to go up
+				catch(System.IndexOutOfRangeException)	// If at the top and trying to go up
 				{
 					currentIndex = menuSelections.Length - 1;
 					currentSelection = menuSelections[currentIndex];
@@ -44,7 +44,7 @@ public class TitleScreenHandler : MonoBehaviour
 				{
 					currentSelection = menuSelections[++currentIndex];
 				}
-				catch(System.IndexOutOfRangeException e)	// If at the bottom and trying to go down
+				catch(System.IndexOutOfRangeException)	// If at the bottom and trying to go down
 				{
 					currentIndex = 0;
 					currentSelection = menuSelections[currentIndex];

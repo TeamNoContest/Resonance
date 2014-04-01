@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\CameraPlayerTracker.cs" />
      <Compile Include="Assets\Scripts\CameraScript.cs" />
      <Compile Include="Assets\Scripts\ChaserScript.cs" />
+     <Compile Include="Assets\Scripts\CommandHandler.cs" />
      <Compile Include="Assets\Scripts\GUIScript.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
      <Compile Include="Assets\Scripts\MusicPlayer.cs" />

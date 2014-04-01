@@ -8,7 +8,6 @@ public class UnitSpawn : MonoBehaviour
 	GameController gcScript;
 	bool isPaused;
 	bool isSpawnWindowOpen;
-	int input;
 
 	// Used for calling the Spawn event
 	public delegate void SpawnUnit(string unit);
@@ -19,7 +18,6 @@ public class UnitSpawn : MonoBehaviour
 		gcScript = gameObject.GetComponent<GameController>();
 		isPaused = false;
 		isSpawnWindowOpen = false;
-		input = 0;
 	}
 
 	void OnEnable()

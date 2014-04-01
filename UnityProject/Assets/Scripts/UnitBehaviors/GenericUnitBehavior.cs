@@ -75,10 +75,10 @@ public class GenericUnitBehavior : MonoBehaviour
     void Start()
     {
         //BroadcastMessage("getMessage");
-        if (shipType == null)
-        {
-            shipType = ShipType.Node;
-        } //Defaults to Node only if a type is not selected.
+        //if (shipType == null)
+        //{
+        //    shipType = ShipType.Node;
+        //} //Defaults to Node only if a type is not selected.
         if (shipType == ShipType.Alpha)
         {
             theGameControllerScript = theGameController.GetComponent<GameController>();
