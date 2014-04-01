@@ -76,10 +76,8 @@ public class GameController : MonoBehaviour
 
 	void Update()
 	{
-		// Listen for Unit Increase/Decrease event.
-
-		//Keeping the value up to date with respect to the player - Moore.
-		if (playerScript != null)
+		// Keep the value up to date with respect to the player
+		if(playerScript != null)
 		{
 			resourceCurrent = (int)playerScript.ResourceLoad;
 		}
@@ -101,6 +99,12 @@ public class GameController : MonoBehaviour
 				runState = RunState.RUNNING;
 				OnPause(false);
 			}
+		}
+
+		// Check for Resource Cheat input
+		if(Input.GetKeyDown(KeyCode.Comma))
+		{
+			playerScript.ResourceLoad += 1000;
 		}
 	}
 
@@ -140,24 +144,41 @@ public class GameController : MonoBehaviour
 	{
 		if(unitCount < unitCap)
 		{
+			GameObject unitPrefab;
+			int unitCost;
+
 			switch(unit.ToLower())
 			{
 			case "interceptor":
-				Instantiate(interceptorPrefab, player.transform.position, Quaternion.identity);
-				resourceCurrent -= interceptorCost;
+				unitPrefab = interceptorPrefab;
+				unitCost = interceptorCost;
+				//Instantiate(interceptorPrefab, player.transform.position, Quaternion.identity);
+				//resourceCurrent -= interceptorCost;
 				break;
 			case "freighter":
-				Instantiate(freighterPrefab, player.transform.position, Quaternion.identity);
-				resourceCurrent -= freighterCost;
+				unitPrefab = freighterPrefab;
+				unitCost = freighterCost;
+				//Instantiate(freighterPrefab, player.transform.position, Quaternion.identity);
+				//resourceCurrent -= freighterCost;
 				break;
 			case "resonator":
-				Instantiate(resonatorPrefab, player.transform.position, Quaternion.identity);
+				unitPrefab = resonatorPrefab;
+				unitCost = resonatorCost;
+				//Instantiate(resonatorPrefab, player.transform.position, Quaternion.identity);
 				resourceCurrent -= resonatorCost;
 				break;
 			default:
+				unitPrefab = null;
+				unitCost = 0;
 				break;
 			}
-			unitCount++;
+
+			if(unitPrefab != null && resourceCurrent >= unitCost)
+			{
+				Instantiate(unitPrefab, player.transform.position, Quaternion.identity);
+				playerScript.ResourceLoad -= unitCost;
+				unitCount++;
+			}
 		}
 	}
 
