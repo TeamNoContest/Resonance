@@ -102,7 +102,7 @@ public class GameController : MonoBehaviour
 		}
 
 		// Check for Resource Cheat input
-		if(Input.GetKeyDown(KeyCode.Comma))
+		if(Input.GetKeyDown(KeyCode.End))
 		{
 			playerScript.ResourceLoad += 1000;
 		}

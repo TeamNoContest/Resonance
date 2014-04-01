@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum Command { ATTACK, COLLECT, STAY, UNLOAD }
+public enum Command { NULL, ATTACK, COLLECT, STAY, UNLOAD }
 
 public class CommandHandler : MonoBehaviour
 {
-	const int NUMBER_OF_PAGES = 2;
+	const int NUMBER_OF_PAGES = 3;
 	bool[] isCommandWindowOpen;
-	Rect[] windowRect;
+	Rect windowRect;
+	bool disablePageTurn;	// Disable page turning after the first frame the button is held.
+	int currentPage;
+	Command command;
 
 	void Start()
 	{
@@ -17,41 +20,125 @@ public class CommandHandler : MonoBehaviour
 			isCommandWindowOpen[i] = false;
 		}
 
-		windowRect = new Rect[NUMBER_OF_PAGES];
-		for(int i = 0; i < windowRect.Length; i++)
-		{
-			windowRect[i] = false;
-		}
+		windowRect = new Rect(0, Screen.height - (1f/3f * (float)Screen.height), 1f/6f * (float)Screen.width, 1f/3f * (float)Screen.height);
+		currentPage = 0;
 	}
 
 	void Update()
 	{
+		#region Detect Input for Windows
 		if(Input.GetAxis("Left Trigger") == 1)
 		{
-			isCommandWindowOpen[0] = true;
-			isCommandWindowOpen[1] = false;
-		}
-		else if(Input.GetAxis("Right Trigger") == 1)
-		{
-			isCommandWindowOpen[0] = false;
-			isCommandWindowOpen[1] = true;
+			isCommandWindowOpen[currentPage] = true;
+
+			if(Input.GetAxis("Digital Move Horizontal") == -1)
+			{
+				if(disablePageTurn == false)
+				{
+					try
+					{
+						OpenPage(--currentPage);
+					}
+					catch(System.IndexOutOfRangeException)	// If an exception was caught, then currentPage is the first element.
+					{
+						currentPage = isCommandWindowOpen.Length - 1;
+						OpenPage(currentPage);
+					}
+					disablePageTurn = true;
+				}
+			}
+			else if(Input.GetAxis("Digital Move Horizontal") == 1)
+			{
+				if(disablePageTurn == false)
+				{
+					try
+					{
+						OpenPage(++currentPage);
+					}
+					catch(System.IndexOutOfRangeException)	// If an exception was caught, then currentPage is the last element.
+					{
+						currentPage = 0;
+						OpenPage(currentPage);
+					}
+					disablePageTurn = true;
+				}
+			}
+			else
+			{
+				disablePageTurn = false;
+			}
 		}
 		else
 		{
-			isCommandWindowOpen[0] = false;
-			isCommandWindowOpen[1] = false;
+			isCommandWindowOpen[currentPage] = false;
+			currentPage = 0;
+			disablePageTurn = false;
 		}
+		#endregion
+
+		#region Detect Input for Command
+		if(isCommandWindowOpen[0])
+		{
+			if(Input.GetButtonDown("Fire1"))
+			{
+				command = Command.ATTACK;
+			}
+			else if(Input.GetButtonDown("Fire2"))
+			{
+				command = Command.COLLECT;
+			}
+			else if(Input.GetButtonDown("Fire3"))
+			{
+				command = Command.STAY;
+			}
+			else if(Input.GetButtonDown("Fire4"))
+			{
+				command = Command.UNLOAD;
+			}
+			else
+			{
+				command = Command.NULL;
+			}
+		}
+		else if(isCommandWindowOpen[1])
+		{
+			command = Command.NULL;
+		}
+		else if(isCommandWindowOpen[2])
+		{
+			command = Command.NULL;
+		}
+
+		if(command != Command.NULL)
+		{
+			// Broadcast event
+		}
+		#endregion
+	}
+
+	void OpenPage(int pageNumber)
+	{
+		// Close all pages, then open the page requested.
+		for(int i = 0; i < isCommandWindowOpen.Length; i++)
+		{
+			isCommandWindowOpen[i] = false;
+		}
+		isCommandWindowOpen[pageNumber] = true;
 	}
 
 	void OnGUI()
 	{
 		if(isCommandWindowOpen[0])
 		{
-			GUI.Window(0, new Rect(0, Screen.height - (Screen.height / 2), 200, 200), CommandWindow1, "Unit Command Page 1");
+			GUI.Window(0, windowRect, CommandWindow1, "Unit Command Page 1");
 		}
 		else if(isCommandWindowOpen[1])
 		{
-			GUI.Window(0, new Rect(0, Screen.height - (Screen.height / 2), 200, 200), CommandWindow2, "Unit Command Page 2");
+			GUI.Window(1, windowRect, CommandWindow2, "Unit Command Page 2");
+		}
+		else if(isCommandWindowOpen[2])
+		{
+			GUI.Window(2, windowRect, CommandWindow3, "Unit Command Page 3");
 		}
 	}
 
@@ -68,6 +155,18 @@ public class CommandHandler : MonoBehaviour
 	}
 
 	void CommandWindow2(int windowID)
+	{
+		GUI.Label(new Rect(10, 25, 70, 30), "1");
+		GUI.Label(new Rect(50, 25, 70, 30), "Placeholder");
+		GUI.Label(new Rect(10, 75, 70, 30), "2");
+		GUI.Label(new Rect(50, 75, 70, 30), "Placeholder");
+		GUI.Label(new Rect(10, 125, 70, 30), "3");
+		GUI.Label(new Rect(50, 125, 70, 30), "Placeholder");
+		GUI.Label(new Rect(10, 175, 70, 30), "4");
+		GUI.Label(new Rect(50, 175, 70, 30), "Placeholder");
+	}
+
+	void CommandWindow3(int windowID)
 	{
 		GUI.Label(new Rect(10, 25, 70, 30), "1");
 		GUI.Label(new Rect(50, 25, 70, 30), "Placeholder");
