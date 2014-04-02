@@ -8,7 +8,7 @@ public class CommandHandler : MonoBehaviour
 	const int NUMBER_OF_PAGES = 3;
 
 	bool[] isCommandWindowOpen;
-	bool isFirstFrameOfSelection;
+	public bool isFirstFrameOfSelection;
 	Rect windowRect;
 	bool disablePageTurn;	// Disable page turning after the first frame the button is held.
 	int currentPage;
@@ -35,17 +35,6 @@ public class CommandHandler : MonoBehaviour
 		#region Detect Input for Windows
 		if(Input.GetAxis("Left Trigger") == 1)
 		{
-			// If the player just pressed the Select Units button (that is, if this is the first frame this is called),
-			// then broadcast a "stop listening" message.
-			if(isFirstFrameOfSelection)
-			{
-				if(OnCommand != null)
-				{
-					OnCommand(Command.NULL);	// If OnCommand is null, that means there are no listeners, thus do nothing.
-				}
-				isFirstFrameOfSelection = false;
-			}
-
 			isCommandWindowOpen[currentPage] = true;
 
 			if(Input.GetAxis("Digital Move Horizontal") == -1)

@@ -25,32 +25,32 @@ public class StatusIndicatorBehavior : MonoBehaviour
     }
 
     //And this is all of those useful utility/modifier methods.
-    public void SetMatieralRed()
+    public void SetMaterialRed()
     {
         renderer.material = matRed;
     }
 	
-    public void SetMatieralNone()
+    public void SetMaterialNone()
     {
         renderer.material = matNone;
     }
 
-    public void SetMatieralBlue()
+    public void SetMaterialBlue()
     {
         renderer.material = matBlue;
     }
 	
-    public void SetMatieralYellow()
+    public void SetMaterialYellow()
     {
         renderer.material = matYellow;
     }
 
-    public void SetMatieralPurple()
+    public void SetMaterialPurple()
     {
         renderer.material = matPurple;
     }
 	
-    public void SetMatieralWhite()
+    public void SetMaterialWhite()
     {
         renderer.material = matWhite;
     }

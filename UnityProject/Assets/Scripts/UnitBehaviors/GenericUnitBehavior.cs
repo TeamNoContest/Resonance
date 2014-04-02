@@ -1,4 +1,4 @@
-﻿﻿using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class GenericUnitBehavior : MonoBehaviour
@@ -56,6 +56,7 @@ public class GenericUnitBehavior : MonoBehaviour
     protected Vector3 startPosition;
     protected const float distanceTreshold = 20.0f;
     private bool isPaused;
+	public bool isSelected;
     public GameObject target;
     public GameObject altTarget;
     public GameObject playingArea;
@@ -75,7 +76,9 @@ public class GenericUnitBehavior : MonoBehaviour
     void OnDisable()
     {
         GameController.OnPause -= HandleOnPause;
-        CommandHandler.OnCommand -= CommandEventHandler;
+		isSelected = false;
+        CommandHandler.OnCommand -= HandleCommandEvent;
+		UnitSelection.OnDeselect -= HandleDeselectEvent;
     }
 
     // Use this for initialization
@@ -346,9 +349,11 @@ public class GenericUnitBehavior : MonoBehaviour
             //Then we add ourselves to the selection and start following the player. But only if we're not a player.
             if (shipType != ShipType.Alpha /* && usScript.iCanHasSelected*/)
             {
-                CommandHandler.OnCommand += CommandEventHandler;
+                CommandHandler.OnCommand += HandleCommandEvent;
+				UnitSelection.OnDeselect += HandleDeselectEvent;
+				isSelected = true;
                 state = State.FollowPlayer;
-                //UpdateStatusIndicator(); DELETEME
+                UpdateStatusIndicator(); //DELETEME
             }
         }
     }
@@ -463,44 +468,52 @@ public class GenericUnitBehavior : MonoBehaviour
             switch (state)
             {
                 case State.Attack:
-                    BroadcastMessage("SetMatieralRed", true, SendMessageOptions.DontRequireReceiver);
+                    BroadcastMessage("SetMaterialRed", true, SendMessageOptions.DontRequireReceiver);
                     break;
                 
                 case State.GatherNearestResourcePoint:
-                    BroadcastMessage("SetMatieralPurple", true, SendMessageOptions.DontRequireReceiver);
+                    BroadcastMessage("SetMaterialPurple", true, SendMessageOptions.DontRequireReceiver);
                     break;
                 
                 case State.FollowPlayer:
-                    BroadcastMessage("SetMatieralWhite", true, SendMessageOptions.DontRequireReceiver);
+					if(isSelected)
+					{
+						BroadcastMessage("SetMaterialBlue", true, SendMessageOptions.DontRequireReceiver);
+					}
+					else
+					{
+                    	BroadcastMessage("SetMaterialWhite", true, SendMessageOptions.DontRequireReceiver);
+					}
                     break;
                 
                 case State.ReturnToBase:
-                    BroadcastMessage("SetMatieralYellow", true, SendMessageOptions.DontRequireReceiver); //The notes suggest this should be purple, but yellow is a bit easier to see the change.
+                    BroadcastMessage("SetMaterialYellow", true, SendMessageOptions.DontRequireReceiver); //The notes suggest this should be purple, but yellow is a bit easier to see the change.
                     break;
                 
                 case State.DropoffAtFreighter:
-                    BroadcastMessage("SetMatieralYellow", true, SendMessageOptions.DontRequireReceiver); //The notes suggest this should be purple, but yellow is a bit easier to see the change.
+                    BroadcastMessage("SetMaterialYellow", true, SendMessageOptions.DontRequireReceiver); //The notes suggest this should be purple, but yellow is a bit easier to see the change.
                     break;
 
             /*
                 case State.ReturnToBase:
-                    BroadcastMessage("SetMatieralYellow", true, SendMessageOptions.DontRequireReceiver); //The notes suggest this should be purple, but yellow is a bit easier to see the change.
+                    BroadcastMessage("SetMaterialYellow", true, SendMessageOptions.DontRequireReceiver); //The notes suggest this should be purple, but yellow is a bit easier to see the change.
                     break;
                     */
                 
                 default: 
-                    BroadcastMessage("SetMatieralNone", true, SendMessageOptions.DontRequireReceiver);
+                    BroadcastMessage("SetMaterialNone", true, SendMessageOptions.DontRequireReceiver);
                     break;
             }
         }
     }
 
-    protected void CommandEventHandler(Command theCommand) //Technically, units shouldn't really 'know' these commands, but this solution is faster (but bad in the long run) than using the OOD Adapter Pattern. Maybe worth changing later for decoupling.  - Moore
+    protected void HandleCommandEvent(Command theCommand) //Technically, units shouldn't really 'know' these commands, but this solution is faster (but bad in the long run) than using the OOD Adapter Pattern. Maybe worth changing later for decoupling.  - Moore
     {
         switch (theCommand)
         {
             case Command.NULL:
-                CommandHandler.OnCommand -= CommandEventHandler;
+                CommandHandler.OnCommand -= HandleCommandEvent;
+				isSelected = false;
                 break;
             
             case Command.ATTACK:
@@ -525,8 +538,17 @@ public class GenericUnitBehavior : MonoBehaviour
         }
 
         //Regardless of what your command was, this unit isn't listening anymore.
-        //CommandHandler.OnCommand -= CommandEventHandler;
+        //CommandHandler.OnCommand -= HandleCommandEvent;
+		isSelected = false;
     }
+
+	// This message is broadcast whenever the player starts the selection process by pressing the Select Units button
+	protected void HandleDeselectEvent()
+	{
+		isSelected = false;
+		UpdateStatusIndicator();
+		UnitSelection.OnDeselect -= HandleDeselectEvent;
+	}
         
 
     #endregion //Mutator/Logic Methods - End

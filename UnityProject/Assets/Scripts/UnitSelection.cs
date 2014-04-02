@@ -14,6 +14,9 @@ public class UnitSelection : MonoBehaviour
 	public AudioClip[] clipsCommands;
 	AudioSource[] audioCommands;
 
+	public delegate void SelectionEventHandler();
+	public static event SelectionEventHandler OnDeselect;
+
 	void Awake()
 	{
 		audioCommands = new AudioSource[clipsCommands.Length];
@@ -40,6 +43,10 @@ public class UnitSelection : MonoBehaviour
 			// If it's the start of the selection process, play an audio
 			if(isStartOfSelection)
 			{
+				if(OnDeselect != null)	// If there are subscribers, do something. Else, do nothing.
+				{
+					OnDeselect();
+				}
 				audioCommands[Random.Range(0, audioCommands.Length)].Play();
                 ClearList();
 			}
