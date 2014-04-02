@@ -6,11 +6,16 @@ public enum Command { NULL, ATTACK, COLLECT, STAY, UNLOAD }
 public class CommandHandler : MonoBehaviour
 {
 	const int NUMBER_OF_PAGES = 3;
+
 	bool[] isCommandWindowOpen;
+	bool isFirstFrameOfSelection;
 	Rect windowRect;
 	bool disablePageTurn;	// Disable page turning after the first frame the button is held.
 	int currentPage;
 	Command command;
+
+	public delegate void CommandEventHandler(Command command);
+	public static event CommandEventHandler OnCommand;
 
 	void Start()
 	{
@@ -20,6 +25,7 @@ public class CommandHandler : MonoBehaviour
 			isCommandWindowOpen[i] = false;
 		}
 
+		isFirstFrameOfSelection = true;
 		windowRect = new Rect(0, Screen.height - (1f/3f * (float)Screen.height), 1f/6f * (float)Screen.width, 1f/3f * (float)Screen.height);
 		currentPage = 0;
 	}
@@ -29,6 +35,17 @@ public class CommandHandler : MonoBehaviour
 		#region Detect Input for Windows
 		if(Input.GetAxis("Left Trigger") == 1)
 		{
+			// If the player just pressed the Select Units button (that is, if this is the first frame this is called),
+			// then broadcast a "stop listening" message.
+			if(isFirstFrameOfSelection)
+			{
+				if(OnCommand != null)
+				{
+					OnCommand(Command.NULL);	// If OnCommand is null, that means there are no listeners, thus do nothing.
+				}
+				isFirstFrameOfSelection = false;
+			}
+
 			isCommandWindowOpen[currentPage] = true;
 
 			if(Input.GetAxis("Digital Move Horizontal") == -1)
@@ -70,6 +87,7 @@ public class CommandHandler : MonoBehaviour
 		}
 		else
 		{
+			isFirstFrameOfSelection = true;
 			isCommandWindowOpen[currentPage] = false;
 			currentPage = 0;
 			disablePageTurn = false;
@@ -95,23 +113,11 @@ public class CommandHandler : MonoBehaviour
 			{
 				command = Command.UNLOAD;
 			}
-			else
-			{
-				command = Command.NULL;
-			}
-		}
-		else if(isCommandWindowOpen[1])
-		{
-			command = Command.NULL;
-		}
-		else if(isCommandWindowOpen[2])
-		{
-			command = Command.NULL;
 		}
 
-		if(command != Command.NULL)
+		if(command != Command.NULL && OnCommand != null)
 		{
-			// Broadcast event
+			OnCommand(command);
 		}
 		#endregion
 	}

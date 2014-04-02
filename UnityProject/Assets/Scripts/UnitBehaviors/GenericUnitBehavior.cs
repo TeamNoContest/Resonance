@@ -316,7 +316,7 @@ public class GenericUnitBehavior : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         //If the object we're colliding with is a unitSelection bubble... - Moore
-        UnitSelection usScript = other.GetComponent<UnitSelection>();
+        UnitSelection usScript = other.transform.parent.GetComponent<UnitSelection>();
         if (usScript != null)
         {
             //Then we add ourselves to the selection and start following the player. But only if we're not a player.

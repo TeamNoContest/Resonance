@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class UnitSelection : MonoBehaviour
 {
 	public int listSize = 10;
+	public GameObject selectionSphere;
 	public float sphereIncreaseRate;
 	Vector3 maxScale, defaultScale;
 	//public GameObject[] selectedObjectList; - Tweaked this, because working with arrays can be a pain. Using a generic list instead. - Moore
@@ -27,7 +28,7 @@ public class UnitSelection : MonoBehaviour
 	void Start()
 	{
 		maxScale = new Vector3(120f, 120f, 120f);
-		defaultScale = transform.localScale;
+		defaultScale = selectionSphere.transform.localScale;
 		selectedObjectList = new List<GameObject>(listSize);
 	}
 
@@ -35,6 +36,7 @@ public class UnitSelection : MonoBehaviour
 	{
 		if(Input.GetButton("Select Sphere"))
 		{
+			selectionSphere.SetActive(true);
 			// If it's the start of the selection process, play an audio
 			if(isStartOfSelection)
 			{
@@ -42,12 +44,12 @@ public class UnitSelection : MonoBehaviour
                 ClearList();
 			}
 
-			if(transform.localScale.x < maxScale.x)
+			if(selectionSphere.transform.localScale.x < maxScale.x)
 			{
-				float x = transform.localScale.x + sphereIncreaseRate * Time.deltaTime;
-				float y = transform.localScale.y + sphereIncreaseRate * Time.deltaTime;
-				float z = transform.localScale.z + sphereIncreaseRate * Time.deltaTime;
-				transform.localScale = new Vector3(x, y, z);
+				float x = selectionSphere.transform.localScale.x + sphereIncreaseRate * Time.deltaTime;
+				float y = selectionSphere.transform.localScale.y + sphereIncreaseRate * Time.deltaTime;
+				float z = selectionSphere.transform.localScale.z + sphereIncreaseRate * Time.deltaTime;
+				selectionSphere.transform.localScale = new Vector3(x, y, z);
 			}
 
 			// The selection process has now gone through one frame, so it's no longer "starting"
@@ -55,11 +57,13 @@ public class UnitSelection : MonoBehaviour
 		}
 		else
 		{
-			transform.localScale = defaultScale;
+			selectionSphere.transform.localScale = defaultScale;
 			//selectionCollider.radius = defaultRadius;
 
 			// The selection process is over, so reset the "start of selection"
 			isStartOfSelection = true;
+
+			selectionSphere.SetActive(false);
 		}
 	}
 
