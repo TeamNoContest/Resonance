@@ -28,6 +28,9 @@ public class GenericUnitBehavior : MonoBehaviour
     }
 
     //Property Instantiation Section
+
+	private const float DAMPING = 7.0f;
+
     public State state = State.FollowPlayer;
     public ShipType shipType;
 
@@ -52,6 +55,7 @@ public class GenericUnitBehavior : MonoBehaviour
     protected Vector3 startPosition;
     protected const float distanceTreshold = 20.0f;
     private bool isPaused;
+
     public GameObject target;
     public GameObject altTarget;
     public GameObject playingArea;
@@ -145,7 +149,7 @@ public class GenericUnitBehavior : MonoBehaviour
     }
     
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         switch (state)
         {
@@ -178,6 +182,7 @@ public class GenericUnitBehavior : MonoBehaviour
             //If close enough, draw resources from it. If not, then fly closer. - Moore
                 if (IsWithinDistanceThreshold(target))
                 {
+					ApplyBrakes();
                     GatherResourcesFromSource(target);
                 } else
                 {
@@ -204,6 +209,7 @@ public class GenericUnitBehavior : MonoBehaviour
                 target = FindClosestGameObjectWithTag("Player"); //This had been planned to be a separate ship, but now it refers to the player. - Moore
                 if (IsWithinDistanceThreshold(target))
                 {
+					ApplyBrakes();
                     TransferResourcesToSource(target); //If you're close enough to the player, drop off your resources until you're empty. - Moore
                 } else
                 {
@@ -231,6 +237,7 @@ public class GenericUnitBehavior : MonoBehaviour
 
                 if (IsWithinDistanceThreshold(target))
                 {
+					ApplyBrakes();
                     TransferResourcesToSource(target); //If you're close enough to the player, drop off your resources until you're empty. - Moore
                 } else
                 {
@@ -253,44 +260,47 @@ public class GenericUnitBehavior : MonoBehaviour
                 {
                     break;
                 }
-        }
-
-        //Done cycling through options based on the state. This is now based on the ship's type.
-        switch (shipType)
-        {
-            case ShipType.Alpha:
-                {
-                    //Only the player gains interest and communicates with the GameController.
-                    if (theGameControllerScript != null)
-                    {
-                        //Update the interest from the GameController.
-                        interestRate = theGameControllerScript.GetInterestRate();
-                        //Bank the interest from existing resources.
-                        ResourceLoad += ResourceLoad * interestRate * Time.deltaTime;
-                    }
-                    break;
-                }
-            case ShipType.Node:
-                {
-                    //Only the player gains interest and communicates with the GameController.
-                    if (ResourceLoad <= 0)
-                    {
-                        //Destroy(gameObject);
-                        ResourceLoad += Random.Range(200, 2000);
-                        transform.position = RandomVector3InRange(playingArea.renderer.bounds.min.x, playingArea.renderer.bounds.max.x, 0, 0, playingArea.renderer.bounds.min.z, playingArea.renderer.bounds.max.z);
-
-                    }
-                    break;
-                }
-        //Interceptors should occasionally attack other units.
-        //Freighters don't have much in the way of special behavior, but may cause resource nodes to appear when attacked?
-        //To make the AI smarter, maybe consider having them drop to the nearest freighter instead of the player if the freighter is closer. - Moore
-        //Resonators should spend some of their Resource load to boost other allied units.
-            default:
-                break;
-        }
+		}
 
     }
+
+	void Update ()
+		{
+			//Done cycling through options based on the state. This is now based on the ship's type.
+	        switch (shipType)
+	        {
+	            case ShipType.Alpha:
+	                {
+	                    //Only the player gains interest and communicates with the GameController.
+	                    if (theGameControllerScript != null)
+	                    {
+	                        //Update the interest from the GameController.
+	                        interestRate = theGameControllerScript.GetInterestRate();
+	                        //Bank the interest from existing resources.
+	                        ResourceLoad += ResourceLoad * interestRate * Time.deltaTime;
+	                    }
+	                    break;
+	                }
+	            case ShipType.Node:
+	                {
+	                    //Only the player gains interest and communicates with the GameController.
+	                    if (ResourceLoad <= 0)
+	                    {
+	                        //Destroy(gameObject);
+	                        ResourceLoad += Random.Range(200, 2000);
+	                        transform.position = RandomVector3InRange(playingArea.renderer.bounds.min.x, playingArea.renderer.bounds.max.x, 0, 0, playingArea.renderer.bounds.min.z, playingArea.renderer.bounds.max.z);
+
+	                    }
+	                    break;
+	                }
+	        //Interceptors should occasionally attack other units.
+	        //Freighters don't have much in the way of special behavior, but may cause resource nodes to appear when attacked?
+	        //To make the AI smarter, maybe consider having them drop to the nearest freighter instead of the player if the freighter is closer. - Moore
+	        //Resonators should spend some of their Resource load to boost other allied units.
+	            default:
+	                break;
+	        }
+		}
 
     //Credit to Jared Cerbin for coming up with this GUI stuff.
     void OnGUI()
@@ -393,7 +403,7 @@ public class GenericUnitBehavior : MonoBehaviour
         float amountRequested = 0.0f;
         GenericUnitBehavior gubScript = targetObject.GetComponent<GenericUnitBehavior>();
 
-        amountRequested = gubScript.gatheringRate * gubScript.rateModifier * Time.deltaTime;
+        amountRequested = gubScript.gatheringRate * gubScript.rateModifier * Time.fixedDeltaTime;
 
         //Can't draw more than the capacity. - Moore
         if (gubScript.resourceCapacity < 0.0f)
@@ -467,14 +477,19 @@ public class GenericUnitBehavior : MonoBehaviour
         {
             //Make sure to check that the target is within a desirable distance. So there should be a maximum distance variable. - Moore
             transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
-            if (IsNotWithinDistanceThreshold(destination))
+			//Quaternion rotation = Quaternion.LookRotation((new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z) - transform.position));
+			//transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * DAMPING);
+
+			if (IsNotWithinDistanceThreshold(destination))
             { //4:23 Defect - Had the < intstead of >.
                 if (rigidbody == null)
                 {
-                    transform.position += (transform.forward * movementSpeed * rateModifier * Time.deltaTime);
+                    transform.position += (transform.forward * movementSpeed * rateModifier * Time.fixedDeltaTime);
                 } else
                 {               //Changing this ^^ to use rigidbodies and forces instead to allow for less weird overlapping stuff. - Moore.            
-                    rigidbody.AddForce(transform.forward * movementSpeed * rateModifier * Time.deltaTime, ForceMode.Impulse); //NOTE: We should only be using *this* version in a fixed update. - Moore.
+					rigidbody.freezeRotation = true;
+					rigidbody.AddForce(-rigidbody.velocity );
+					rigidbody.AddForce(transform.forward * movementSpeed * rateModifier * Time.fixedDeltaTime); //NOTE: We should only be using *this* version in a fixed update. - Moore.
                     //rigidbody.velocity = transform.forward * movementSpeed * rateModifier * Time.deltaTime;         
                 }       
             }
@@ -494,7 +509,9 @@ public class GenericUnitBehavior : MonoBehaviour
                 if (rigidbody != null)
                 {               
 
-                    rigidbody.AddForce(transform.forward * movementSpeed * rateModifier * Time.deltaTime);        
+                    rigidbody.freezeRotation = true;
+					rigidbody.AddForce(-rigidbody.velocity );
+					rigidbody.AddForce(transform.forward * movementSpeed * rateModifier /** Time.fixedDeltaTime*/); //NOTE: We should only be using *this* version in a fixed update. - Moore.
                 }
                 else
                 {
@@ -555,7 +572,8 @@ public class GenericUnitBehavior : MonoBehaviour
     {
         if (rigidbody != null)
         {
-            rigidbody.AddForce(-0.5f * rigidbody.velocity);
+            rigidbody.AddForce(-0.6f * rigidbody.velocity);
+			if (rigidbody.velocity.magnitude < 0.1f) {rigidbody.velocity = Vector3.zero;}
         }
     }
 
