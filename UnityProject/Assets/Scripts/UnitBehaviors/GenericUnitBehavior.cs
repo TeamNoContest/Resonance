@@ -72,11 +72,10 @@ public class GenericUnitBehavior : MonoBehaviour
         UpdateStatusIndicator();
     }
 
-
-	void OnDisable()
+    void OnDisable()
     {
         GameController.OnPause -= HandleOnPause;
-		CommandHandler.OnCommand -= CommandEventHandler;
+        CommandHandler.OnCommand -= CommandEventHandler;
     }
 
     // Use this for initialization
@@ -162,6 +161,7 @@ public class GenericUnitBehavior : MonoBehaviour
             
             case State.Stay:
                 //Distinct from dummy. If this unit has distinct behaviors like attacking, it should still perform those duties... just not in this script. - Moore
+                ApplyBrakes();
                 break;
 
             case State.ChaseTarget:
@@ -234,32 +234,41 @@ public class GenericUnitBehavior : MonoBehaviour
                 break;
 
             case State.DropoffAtFreighter:
+            
+            if (shipType == ShipType.Freighter)
+            {state = State.ReturnToBase;}
+            else
+            {
+            
                 target = FindClosestGameObjectWithTag("Freighter");
                 altTarget = FindClosestGameObjectWithTag("Player");
 
-            //Change the target to point at the same thing as the altTarget if the altTarget is closer.
-                if (Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.transform.position.x, target.transform.position.z)) > Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(altTarget.transform.position.x, altTarget.transform.position.z)))
+                if (target != null && altTarget != null)
                 {
-                    target = altTarget;
-                }
+                    //Change the target to point at the same thing as the altTarget if the altTarget is closer.
+                    if (Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.transform.position.x, target.transform.position.z)) > Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(altTarget.transform.position.x, altTarget.transform.position.z)))
+                    {
+                        target = altTarget;
+                    }
 
-                if (IsWithinDistanceThreshold(target))
-                {
-                    ApplyBrakes();
-                    TransferResourcesToSource(target); //If you're close enough to the player, drop off your resources until you're empty. - Moore
-                } else
-                {
-                    FlyTowardsGameObjectWithSmartBraking(target); //If you're not close enough, get closer. - Moore.
-                }
+                    if (IsWithinDistanceThreshold(target))
+                    {
+                        ApplyBrakes();
+                        TransferResourcesToSource(target); //If you're close enough to the player, drop off your resources until you're empty. - Moore
+                    } else
+                    {
+                        FlyTowardsGameObjectWithSmartBraking(target); //If you're not close enough, get closer. - Moore.
+                    }
             
-            //If no more resources to deposit, go back to the default behavior of following the player.
-                if (ResourceLoad <= 0.0f)
-                {
-                    state = State.GatherNearestResourcePoint;
-                    //UpdateStatusIndicator(); DELETEME
+                    //If no more resources to deposit, go back to the default behavior of following the player.
+                    if (ResourceLoad <= 0.0f)
+                    {
+                        state = State.GatherNearestResourcePoint;
+                        //UpdateStatusIndicator(); DELETEME
                                 
+                    }
                 }
-            
+            }
                 break;
 
 
@@ -472,6 +481,12 @@ public class GenericUnitBehavior : MonoBehaviour
                 case State.DropoffAtFreighter:
                     BroadcastMessage("SetMatieralYellow", true, SendMessageOptions.DontRequireReceiver); //The notes suggest this should be purple, but yellow is a bit easier to see the change.
                     break;
+
+            /*
+                case State.ReturnToBase:
+                    BroadcastMessage("SetMatieralYellow", true, SendMessageOptions.DontRequireReceiver); //The notes suggest this should be purple, but yellow is a bit easier to see the change.
+                    break;
+                    */
                 
                 default: 
                     BroadcastMessage("SetMatieralNone", true, SendMessageOptions.DontRequireReceiver);
@@ -485,7 +500,7 @@ public class GenericUnitBehavior : MonoBehaviour
         switch (theCommand)
         {
             case Command.NULL:
-			CommandHandler.OnCommand -= CommandEventHandler;
+                CommandHandler.OnCommand -= CommandEventHandler;
                 break;
             
             case Command.ATTACK:
@@ -501,7 +516,8 @@ public class GenericUnitBehavior : MonoBehaviour
                 break;
             
             case Command.UNLOAD:
-                state = State.ReturnToBase; // - This is different from Dropoff at Freighter (Which is done while out collecting) as it goes ONLY to the player. The player will collect much faster and is already in selection range. - Moore
+            if (shipType == ShipType.Freighter) {state = State.ReturnToBase;} //WORKAROUND: We shouldn't be checking for shiptypes here at all. Right now, the state is set over and over until the 'selection' is ended.
+            else {state = State.DropoffAtFreighter;} // - This is different from Dropoff at Freighter (Which is done while out collecting) as it goes ONLY to the player. The player will collect much faster and is already in selection range. - Moore
                 break;
             
             default:
@@ -509,7 +525,7 @@ public class GenericUnitBehavior : MonoBehaviour
         }
 
         //Regardless of what your command was, this unit isn't listening anymore.
-        CommandHandler.OnCommand -= CommandEventHandler;
+        //CommandHandler.OnCommand -= CommandEventHandler;
     }
         
 
