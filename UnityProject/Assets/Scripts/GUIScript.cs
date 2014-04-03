@@ -5,7 +5,7 @@ public class GUIScript : MonoBehaviour
 {
 	GameObject gcProp;
 	GameController gcScript;
-	int resourceCurrent, resourceGoal;
+	float resourceCurrent, resourceGoal;
 	float timeCurrent, timeGoal;
 	bool isPaused;
 
@@ -62,13 +62,13 @@ public class GUIScript : MonoBehaviour
 			{
 				//...display only current resources
 				GUI.Label(new Rect(Screen.width - 150, 10, 150, 50),
-				          "Resources: " + resourceCurrent);
+				          "Resources: " + resourceCurrent.ToString("F0"));
 			}
 			else
 			{
 				//...else display current resources and resource goal
 				GUI.Label(new Rect(Screen.width - 150, 10, 150, 50),
-				          "Resources: " + resourceCurrent + "/" + resourceGoal);
+				          "Resources: " + resourceCurrent.ToString("F0") + "/" + resourceGoal);
 			}
 			#endregion
 		}

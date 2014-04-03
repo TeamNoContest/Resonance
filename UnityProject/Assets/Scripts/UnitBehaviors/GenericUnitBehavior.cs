@@ -4,7 +4,7 @@ using System.Collections;
 public class GenericUnitBehavior : MonoBehaviour
 {
 
-    #region //Enums used for state machines and easy access in inspector.
+    #region Enums used for state machines and easy access in inspector.
     public enum State
     {
         Dummy,
@@ -353,7 +353,7 @@ public class GenericUnitBehavior : MonoBehaviour
 				UnitSelection.OnDeselect += HandleDeselectEvent;
 				isSelected = true;
                 state = State.FollowPlayer;
-                UpdateStatusIndicator(); //DELETEME
+                //UpdateStatusIndicator(); //DELETEME
             }
         }
     }
@@ -546,8 +546,8 @@ public class GenericUnitBehavior : MonoBehaviour
 	protected void HandleDeselectEvent()
 	{
 		isSelected = false;
-		UpdateStatusIndicator();
 		UnitSelection.OnDeselect -= HandleDeselectEvent;
+		CommandHandler.OnCommand -= HandleCommandEvent;
 	}
         
 

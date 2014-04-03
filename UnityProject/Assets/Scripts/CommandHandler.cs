@@ -107,6 +107,7 @@ public class CommandHandler : MonoBehaviour
 		if(command != Command.NULL && OnCommand != null)
 		{
 			OnCommand(command);
+			command = Command.NULL;
 		}
 		#endregion
 	}

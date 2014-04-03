@@ -9,8 +9,8 @@ public enum RunState { RUNNING, PAUSED };
 public class GameController : MonoBehaviour
 {
 	GameMode gameMode;		// Game mode being played
-	int resourceCurrent;	// Number of resources banked in the mothership
-	int resourceGoal;		// Number of resources to win;
+	float resourceCurrent;	// Number of resources banked in the mothership
+	float resourceGoal;		// Number of resources to win;
 							// if negative, game mode doesn't have resource goal
 	float timeCurrent;		// Time elapsed since beginning of game, in seconds
 	float timeGoal;			// Amount of time alloted for player to win, in seconds;
@@ -43,8 +43,8 @@ public class GameController : MonoBehaviour
 	{
 		gameMode = GameMode.TIME_LIMIT;
 		runState = RunState.RUNNING;
-		resourceCurrent = 100;
-		resourceGoal = 1000;
+		resourceCurrent = 100f;
+		resourceGoal = 10000f;
 		timeCurrent = 0f;
 		timeGoal = 3600f;	// one hour time limit
 		interestRate = 0.01f; // This basically means a bonus 1 point per second for every 200, or - Moore
@@ -61,7 +61,7 @@ public class GameController : MonoBehaviour
 		//This is not the best OOP because of the forced coupling. If you have an idea for how to keep the functionality and reduce this coupling, let me know. - Moore
 		player = GameObject.FindGameObjectWithTag("Player");
 		playerScript = player.GetComponent<GenericUnitBehavior>();
-		resourceCurrent = (int)playerScript.ResourceLoad;
+		resourceCurrent = playerScript.ResourceLoad;
 	}
 
 	void OnEnable()
@@ -79,7 +79,7 @@ public class GameController : MonoBehaviour
 		// Keep the value up to date with respect to the player
 		if(playerScript != null)
 		{
-			resourceCurrent = (int)playerScript.ResourceLoad;
+			resourceCurrent = playerScript.ResourceLoad;
 		}
 
 		// Check for pause input
@@ -112,14 +112,6 @@ public class GameController : MonoBehaviour
 	{
 		timeCurrent += Time.deltaTime;	// Increase time by the amount of time since last update.
 		CheckWinLoss();
-	}
-
-	/// <summary>
-	/// Award the player with resources based of compound interest.
-	/// </summary>
-	void AwardInterest()
-	{
-		resourceCurrent = Mathf.FloorToInt(resourceCurrent + resourceCurrent * interestRate);
 	}
 
 	/// <summary>
@@ -182,9 +174,9 @@ public class GameController : MonoBehaviour
 		}
 	}
 
-	public int[] GetResources()
+	public float[] GetResources()
 	{
-		int[] temp = {resourceCurrent, resourceGoal};
+		float[] temp = {resourceCurrent, resourceGoal};
 		return temp;
 	}
 
