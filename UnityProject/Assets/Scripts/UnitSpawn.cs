@@ -53,14 +53,14 @@ public class UnitSpawn : GUIScript
 
 	void UnitSpawnWindow(int windowID)
 	{
-		GUI.Label(new Rect(10, 40, 70, 30), "A");
-		GUI.Label(new Rect(50, 40, 70, 30), "Interceptor");
-		GUI.Label(new Rect(130, 40, 70, 30), gcScript.InterceptorCost.ToString());
-		GUI.Label(new Rect(10, 100, 70, 30), "B");
-		GUI.Label(new Rect(50, 100, 70, 30), "Freighter");
-		GUI.Label(new Rect(130, 100, 70, 30), gcScript.FreighterCost.ToString());
-		GUI.Label(new Rect(10, 160, 70, 30), "X");
-		GUI.Label(new Rect(50, 160, 70, 30), "Resonator");
-		GUI.Label(new Rect(130, 160, 70, 30), gcScript.ResonatorCost.ToString());
+		GUI.Label(new Rect(popupWindowWidth * (1f/7f), popupWindowHeight * (1f/5f), 70, 30), "A");
+		GUI.Label(new Rect(popupWindowWidth * (1f/3f), popupWindowHeight * (1f/5f), 70, 30), "Interceptor");
+		GUI.Label(new Rect(popupWindowWidth * (5f/7f), popupWindowHeight * (1f/5f), 70, 30), gcScript.InterceptorCost.ToString());
+		GUI.Label(new Rect(popupWindowWidth * (1f/7f), popupWindowHeight * (2f/5f), 70, 30), "B");
+		GUI.Label(new Rect(popupWindowWidth * (1f/3f), popupWindowHeight * (2f/5f), 70, 30), "Freighter");
+		GUI.Label(new Rect(popupWindowWidth * (5f/7f), popupWindowHeight * (2f/5f), 70, 30), gcScript.FreighterCost.ToString());
+		GUI.Label(new Rect(popupWindowWidth * (1f/7f), popupWindowHeight * (3f/5f), 70, 30), "X");
+		GUI.Label(new Rect(popupWindowWidth * (1f/3f), popupWindowHeight * (3f/5f), 70, 30), "Resonator");
+		GUI.Label(new Rect(popupWindowWidth * (5f/7f), popupWindowHeight * (3f/5f), 70, 30), gcScript.ResonatorCost.ToString());
 	}
 }

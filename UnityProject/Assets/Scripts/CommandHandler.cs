@@ -5,7 +5,7 @@ public enum Command { NULL, ATTACK, COLLECT, STAY, UNLOAD }
 
 public class CommandHandler : GUIScript
 {
-	const int NUMBER_OF_PAGES = 3;
+	const int NUMBER_OF_PAGES = 1;
 
 	bool[] isCommandWindowOpen;
 	bool isFirstFrameOfSelection;
@@ -128,53 +128,45 @@ public class CommandHandler : GUIScript
 
 	void OnGUI()
 	{
-		if(isCommandWindowOpen[0])
+		for(int i = 0; i < NUMBER_OF_PAGES; i++)
 		{
-			GUI.Window(0, popupWindowRect, CommandWindow1, "Unit Command Page 1");
-		}
-		else if(isCommandWindowOpen[1])
-		{
-			GUI.Window(1, popupWindowRect, CommandWindow2, "Unit Command Page 2");
-		}
-		else if(isCommandWindowOpen[2])
-		{
-			GUI.Window(2, popupWindowRect, CommandWindow3, "Unit Command Page 3");
+			if(isCommandWindowOpen[i])
+			{
+				GUI.Window(i, popupWindowRect, CommandWindow, "Unit Command Page " + (i+1));
+			}
 		}
 	}
 
-	void CommandWindow1(int windowID)
+	// To create another command page, just replace the "Placeholder" string with the name of the command.
+	// Be sure to copy and paste the placeholder case so you always have the placeholder code!
+	// Don't worry, it won't be displayed unless you set the NUMBER_OF_PAGES const to be equal to the
+	// number of pages you want.
+	void CommandWindow(int windowID)
 	{
-		GUI.Label(new Rect(10, 25, 70, 30), "1");
-		GUI.Label(new Rect(50, 25, 70, 30), "Attack");
-		GUI.Label(new Rect(10, 75, 70, 30), "2");
-		GUI.Label(new Rect(50, 75, 70, 30), "Collect");
-		GUI.Label(new Rect(10, 125, 70, 30), "3");
-		GUI.Label(new Rect(50, 125, 70, 30), "Stay");
-		GUI.Label(new Rect(10, 175, 70, 30), "4");
-		GUI.Label(new Rect(50, 175, 70, 30), "Unload");
-	}
-
-	void CommandWindow2(int windowID)
-	{
-		GUI.Label(new Rect(10, 25, 70, 30), "1");
-		GUI.Label(new Rect(50, 25, 70, 30), "Placeholder");
-		GUI.Label(new Rect(10, 75, 70, 30), "2");
-		GUI.Label(new Rect(50, 75, 70, 30), "Placeholder");
-		GUI.Label(new Rect(10, 125, 70, 30), "3");
-		GUI.Label(new Rect(50, 125, 70, 30), "Placeholder");
-		GUI.Label(new Rect(10, 175, 70, 30), "4");
-		GUI.Label(new Rect(50, 175, 70, 30), "Placeholder");
-	}
-
-	void CommandWindow3(int windowID)
-	{
-		GUI.Label(new Rect(10, 25, 70, 30), "1");
-		GUI.Label(new Rect(50, 25, 70, 30), "Placeholder");
-		GUI.Label(new Rect(10, 75, 70, 30), "2");
-		GUI.Label(new Rect(50, 75, 70, 30), "Placeholder");
-		GUI.Label(new Rect(10, 125, 70, 30), "3");
-		GUI.Label(new Rect(50, 125, 70, 30), "Placeholder");
-		GUI.Label(new Rect(10, 175, 70, 30), "4");
-		GUI.Label(new Rect(50, 175, 70, 30), "Placeholder");
+		switch(windowID)
+		{
+		case 0:
+			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (1f/5f), 70, 30), "A");
+			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (1f/5f), 70, 30), "Attack");
+			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (2f/5f), 70, 30), "B");
+			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (2f/5f), 70, 30), "Collect");
+			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (3f/5f), 70, 30), "X");
+			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (3f/5f), 70, 30), "Stay");
+			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (4f/5f), 70, 30), "Y");
+			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (4f/5f), 70, 30), "Unload");
+			break;
+		case 1:
+			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (1f/5f), 70, 30), "A");
+			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (1f/5f), 70, 30), "Placeholder");
+			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (2f/5f), 70, 30), "B");
+			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (2f/5f), 70, 30), "Placeholder");
+			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (3f/5f), 70, 30), "X");
+			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (3f/5f), 70, 30), "Placeholder");
+			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (4f/5f), 70, 30), "Y");
+			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (4f/5f), 70, 30), "Placeholder");
+			break;
+		default:
+			break;
+		}
 	}
 }
