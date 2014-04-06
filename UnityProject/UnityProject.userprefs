@@ -1,8 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\..\School\Game Programming II\ColonyEight\Assets\Scripts\Rotate.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\CommandHandler.cs">
     <Files>
-      <File FileName="..\..\..\School\Game Programming II\ColonyEight\Assets\Scripts\Rotate.cs" Line="11" Column="85" />
+      <File FileName="Assets\Scripts\UnitBehaviors\GenericUnitBehavior.cs" Line="48" Column="51" />
+      <File FileName="Assets\Scripts\UnitSpawn.cs" Line="18" Column="96" />
+      <File FileName="Assets\Scripts\GameController.cs" Line="167" Column="11" />
+      <File FileName="Assets\Scripts\GUIScript.cs" Line="18" Column="1" />
+      <File FileName="Assets\Scripts\UnitBehaviors\ResonatorUnitBehavior.cs" Line="19" Column="2" />
+      <File FileName="Assets\Scripts\CommandHandler.cs" Line="24" Column="51" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

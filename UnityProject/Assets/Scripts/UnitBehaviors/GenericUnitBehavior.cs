@@ -124,8 +124,9 @@ public class GenericUnitBehavior : MonoBehaviour
                     attackRate = 0.0f;
                     movementSpeed = 15.0f;
                     resourceCapacity = -1.0f;
-                    ResourceLoad = 10.0f;
+                    ResourceLoad = 3000.0f;
                     integrity = 100.0f;
+					interestRate = theGameControllerScript.InterestRate;
                     break;
                 }
             case ShipType.Freighter:
@@ -134,7 +135,7 @@ public class GenericUnitBehavior : MonoBehaviour
                     attackRate = 0.0f;
                     movementSpeed = 5.0f;
                     resourceCapacity = 1000.0f;
-                    ResourceLoad = 500.0f; 
+                    ResourceLoad = 0.0f; 
                     integrity = 200.0f;
                     break;
                 }
@@ -144,7 +145,7 @@ public class GenericUnitBehavior : MonoBehaviour
                     attackRate = 0.1f;
                     movementSpeed = 25.0f;
                     resourceCapacity = 250.0f;
-                    ResourceLoad = 50.0f;
+                    ResourceLoad = 0.0f;
                     integrity = 100.0f;
                     break;
                 }
@@ -302,7 +303,7 @@ public class GenericUnitBehavior : MonoBehaviour
                     if (theGameControllerScript != null)
                     {
                         //Update the interest from the GameController.
-                        interestRate = theGameControllerScript.GetInterestRate();
+                        //interestRate = theGameControllerScript.InterestRate;
                         //Bank the interest from existing resources.
                         ResourceLoad += ResourceLoad * interestRate * Time.deltaTime;
                     }

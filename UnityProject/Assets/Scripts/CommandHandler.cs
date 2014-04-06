@@ -3,22 +3,24 @@ using System.Collections;
 
 public enum Command { NULL, ATTACK, COLLECT, STAY, UNLOAD }
 
-public class CommandHandler : MonoBehaviour
+public class CommandHandler : GUIScript
 {
 	const int NUMBER_OF_PAGES = 3;
 
 	bool[] isCommandWindowOpen;
-	public bool isFirstFrameOfSelection;
-	Rect windowRect;
-	bool disablePageTurn;	// Disable page turning after the first frame the button is held.
+	bool isFirstFrameOfSelection;
+	Rect popupWindowRect;
+	bool disablePageTurn;	// Disable page turning after the first frame the button is held
 	int currentPage;
 	Command command;
 
 	public delegate void CommandEventHandler(Command command);
 	public static event CommandEventHandler OnCommand;
 
-	void Start()
+	new void Start()
 	{
+		base.Start();
+
 		isCommandWindowOpen = new bool[NUMBER_OF_PAGES];
 		for(int i = 0; i < isCommandWindowOpen.Length; i++)
 		{
@@ -26,7 +28,9 @@ public class CommandHandler : MonoBehaviour
 		}
 
 		isFirstFrameOfSelection = true;
-		windowRect = new Rect(0, Screen.height - (1f/3f * (float)Screen.height), 1f/6f * (float)Screen.width, 1f/3f * (float)Screen.height);
+		popupWindowRect = new Rect(0, Screen.height - popupWindowHeight, popupWindowWidth, popupWindowHeight);
+
+
 		currentPage = 0;
 	}
 
@@ -126,15 +130,15 @@ public class CommandHandler : MonoBehaviour
 	{
 		if(isCommandWindowOpen[0])
 		{
-			GUI.Window(0, windowRect, CommandWindow1, "Unit Command Page 1");
+			GUI.Window(0, popupWindowRect, CommandWindow1, "Unit Command Page 1");
 		}
 		else if(isCommandWindowOpen[1])
 		{
-			GUI.Window(1, windowRect, CommandWindow2, "Unit Command Page 2");
+			GUI.Window(1, popupWindowRect, CommandWindow2, "Unit Command Page 2");
 		}
 		else if(isCommandWindowOpen[2])
 		{
-			GUI.Window(2, windowRect, CommandWindow3, "Unit Command Page 3");
+			GUI.Window(2, popupWindowRect, CommandWindow3, "Unit Command Page 3");
 		}
 	}
 

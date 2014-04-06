@@ -8,22 +8,46 @@ public enum RunState { RUNNING, PAUSED };
 
 public class GameController : MonoBehaviour
 {
-	GameMode gameMode;		// Game mode being played
-	float resourceCurrent;	// Number of resources banked in the mothership
-	float resourceGoal;		// Number of resources to win;
-							// if negative, game mode doesn't have resource goal
-	float timeCurrent;		// Time elapsed since beginning of game, in seconds
-	float timeGoal;			// Amount of time alloted for player to win, in seconds;
-							// if negative, game mode doesn't have time goal
-	float interestRate;		// Percentage of curent resources gained per second
+	#region Class variables
+	GameMode gameMode;					// Game mode being played
+	GameObject player;
+	GenericUnitBehavior playerScript;
+
+	// Percentage of current resources gained per second
+	private float _interestRate;
+	public float InterestRate { get { return _interestRate; } }
+
 	//float interestTime;		// The amount of time in seconds between interest awards
-	int unitCount;			// Current number of units under player control
-	int unitCap;			// Maximum number of units available to purchase
+
+	// Number of resources inside the player's ship
+	private float _currentResources;
+	public float CurrentResources { get { return _currentResources; } }
+	// Number of resources required to win; if negative, there is no resource goal
+	private float _resourceGoal;
+	public float ResourceGoal { get { return _resourceGoal; } }
+
+	// Time elapsed since beginning of game, in seconds
+	private float _currentTime;
+	public float CurrentTime { get { return _currentTime; } }
+	// Time alloted for player to win, in seconds; if negative, there is no resource goal
+	private float _timeGoal;
+	public float TimeGoal { get { return _timeGoal; } }
+
+	// Current and maximum number of units
+	private int _unitCount;
+	public int UnitCount { get { return _unitCount; } }
+	private int _unitCap;
+	public int UnitCap { get { return _unitCap; } }
+
+	// Costs to create the units
+	private int _interceptorCost;
+	public int InterceptorCost { get { return _interceptorCost; } }
+	private int _freighterCost;
+	public int FreighterCost { get { return _freighterCost; } }
+	private int _resonatorCost;
+	public int ResonatorCost { get { return _resonatorCost; } }
 
 	public RunState runState;		// Used to mark the game as paused or running
-	public int interceptorCost;		// Cost in resources to create a new Interceptor
-	public int freighterCost;		// Cost in resources to create a new Freighter
-	public int resonatorCost;		// Cost in resources to create a new Resonator
 
 	// Variables to hold the unit prefabs for the purpose of spawning new units
 	public GameObject interceptorPrefab, freighterPrefab, resonatorPrefab;
@@ -34,26 +58,22 @@ public class GameController : MonoBehaviour
 	// Used for calling the OnPause event. The flag indicates whether the game is being paused (true) or unpaused (false).
 	public delegate void PauseEventHandler(bool flag);
 	public static event PauseEventHandler OnPause;
-
-	//I realize I shouldn't directly manipulate your code, but this is done to have the always up-to-date value from the player/mothership. - Moore
-	GameObject player;
-	GenericUnitBehavior playerScript;
+	#endregion
 
 	void Start()
 	{
 		gameMode = GameMode.TIME_LIMIT;
 		runState = RunState.RUNNING;
-		resourceCurrent = 100f;
-		resourceGoal = 10000f;
-		timeCurrent = 0f;
-		timeGoal = 3600f;	// one hour time limit
-		interestRate = 0.01f; // This basically means a bonus 1 point per second for every 200, or - Moore
+		_resourceGoal = 10000f;
+		_currentTime = 0f;
+		_timeGoal = 3600f;	// one hour time limit
+		_interestRate = 0.001f;
 		//interestTime = 5f;
-		unitCount = 0;
-		unitCap = 10;
-		interceptorCost = 1000;
-		freighterCost = 1000;
-		resonatorCost = 1000;
+		_unitCount = 0;
+		_unitCap = 10;
+		_interceptorCost = 1000;
+		_freighterCost = 1000;
+		_resonatorCost = 1000;
 
 		//InvokeRepeating("AwardInterest", interestTime, interestTime); // Sorry for tweaking this without asking first. Gonna use Time.deltaTime for continuous intrest accruement. - Moore
 
@@ -61,7 +81,7 @@ public class GameController : MonoBehaviour
 		//This is not the best OOP because of the forced coupling. If you have an idea for how to keep the functionality and reduce this coupling, let me know. - Moore
 		player = GameObject.FindGameObjectWithTag("Player");
 		playerScript = player.GetComponent<GenericUnitBehavior>();
-		resourceCurrent = playerScript.ResourceLoad;
+		_currentResources = playerScript.ResourceLoad;
 	}
 
 	void OnEnable()
@@ -79,7 +99,7 @@ public class GameController : MonoBehaviour
 		// Keep the value up to date with respect to the player
 		if(playerScript != null)
 		{
-			resourceCurrent = playerScript.ResourceLoad;
+			_currentResources = playerScript.ResourceLoad;
 		}
 
 		// Check for pause input
@@ -110,7 +130,7 @@ public class GameController : MonoBehaviour
 
 	void LateUpdate()
 	{
-		timeCurrent += Time.deltaTime;	// Increase time by the amount of time since last update.
+		_currentTime += Time.deltaTime;	// Increase time by the amount of time since last update.
 		CheckWinLoss();
 	}
 
@@ -121,11 +141,11 @@ public class GameController : MonoBehaviour
 	{
 		if(gameMode == GameMode.TIME_LIMIT)
 		{
-			if(resourceCurrent >= resourceGoal)
+			if(_currentResources >= _resourceGoal)
 			{
 				// Player wins
 			}
-			else if(timeCurrent >= timeGoal)
+			else if(_currentTime >= _timeGoal)
 			{
 				// Player loses
 			}
@@ -134,7 +154,7 @@ public class GameController : MonoBehaviour
 
 	void SpawnUnit(string unit)
 	{
-		if(unitCount < unitCap)
+		if(_unitCount < _unitCap)
 		{
 			GameObject unitPrefab;
 			int unitCost;
@@ -143,21 +163,15 @@ public class GameController : MonoBehaviour
 			{
 			case "interceptor":
 				unitPrefab = interceptorPrefab;
-				unitCost = interceptorCost;
-				//Instantiate(interceptorPrefab, player.transform.position, Quaternion.identity);
-				//resourceCurrent -= interceptorCost;
+				unitCost = _interceptorCost;
 				break;
 			case "freighter":
 				unitPrefab = freighterPrefab;
-				unitCost = freighterCost;
-				//Instantiate(freighterPrefab, player.transform.position, Quaternion.identity);
-				//resourceCurrent -= freighterCost;
+				unitCost = _freighterCost;
 				break;
 			case "resonator":
 				unitPrefab = resonatorPrefab;
-				unitCost = resonatorCost;
-				//Instantiate(resonatorPrefab, player.transform.position, Quaternion.identity);
-				resourceCurrent -= resonatorCost;
+				unitCost = _resonatorCost;
 				break;
 			default:
 				unitPrefab = null;
@@ -165,41 +179,12 @@ public class GameController : MonoBehaviour
 				break;
 			}
 
-			if(unitPrefab != null && resourceCurrent >= unitCost)
+			if(unitPrefab != null && _currentResources >= unitCost)
 			{
 				Instantiate(unitPrefab, player.transform.position, Quaternion.identity);
 				playerScript.ResourceLoad -= unitCost;
-				unitCount++;
+				_unitCount++;
 			}
 		}
-	}
-
-	public float[] GetResources()
-	{
-		float[] temp = {resourceCurrent, resourceGoal};
-		return temp;
-	}
-
-	public float[] GetTimes()
-	{
-		float[] temp = {timeCurrent, timeGoal};
-		return temp;
-	}
-
-	public float GetInterestRate() //ACCESSOR: Added this so I can check it in the Units. - Moore
-	{
-		return interestRate;
-	}
-
-	public int[] GetUnitCosts()
-	{
-		int[] temp = {interceptorCost, freighterCost, resonatorCost};
-		return temp;
-	}
-
-	public int[] GetUnitCountAndCap()
-	{
-		int[] temp = {unitCount, unitCap};
-		return temp;
 	}
 }

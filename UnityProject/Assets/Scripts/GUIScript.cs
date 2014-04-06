@@ -3,35 +3,30 @@ using System.Collections;
 
 public class GUIScript : MonoBehaviour
 {
-	GameObject gcProp;
-	GameController gcScript;
-	float resourceCurrent, resourceGoal;
-	float timeCurrent, timeGoal;
-	bool isPaused;
+	protected GameController gcScript;
+	protected int screenWidth, screenHeight;
+	protected int popupWindowWidth, popupWindowHeight;
+	protected bool isPaused;
 
-	void Start()
+	public GameObject gameController;
+
+	protected void Start()
 	{
-		gcProp = GameObject.Find("Game Controller Prop");
-		gcScript = gcProp.GetComponent<GameController>();
+		popupWindowWidth = Screen.width / 5;
+		popupWindowHeight = Screen.height / 2;
+
+		gcScript = gameController.GetComponent<GameController>();
 		isPaused = false;
 	}
 
-	void OnEnable()
+	protected void OnEnable()
 	{
 		GameController.OnPause += HandleOnPause;
 	}
 
-	void OnDisable()
+	protected void OnDisable()
 	{
 		GameController.OnPause -= HandleOnPause;
-	}
-
-	void Update()
-	{
-		resourceCurrent = gcScript.GetResources()[0];
-		resourceGoal = gcScript.GetResources()[1];
-		timeCurrent = gcScript.GetTimes()[0];
-		timeGoal = gcScript.GetTimes()[1];
 	}
 
 	void OnGUI()
@@ -40,48 +35,41 @@ public class GUIScript : MonoBehaviour
 		{
 			#region Display Time
 			// If the game mode does not have a time goal...
-			if(timeGoal < 0)
+			if(gcScript.TimeGoal < 0)
 			{
 				//...display time elapsed
-				GUI.Label(new Rect(10, 10, 175, 50), "Time Elapsed: " + Mathf.FloorToInt(timeCurrent));
+				GUI.Label(new Rect(10, 10, 175, 50), "Time Elapsed: " + Mathf.FloorToInt(gcScript.CurrentTime));
 			}
 			else
 			{
 				//...else display time remaining
-				GUI.Label(new Rect(10, 10, 175, 50), "Time Remaining: " + Mathf.FloorToInt(timeGoal - timeCurrent));
+				GUI.Label(new Rect(10, 10, 175, 50), "Time Remaining: " + Mathf.FloorToInt(gcScript.TimeGoal - gcScript.CurrentTime));
 			}
 			#endregion
 
 			#region Display Unit Cap
-			GUI.Label(new Rect(Screen.width / 2 - 25, 10, 100, 50), "Units: " + gcScript.GetUnitCountAndCap()[0] + "/" + gcScript.GetUnitCountAndCap()[1]);
+			GUI.Label(new Rect(Screen.width / 2 - 25, 10, 100, 50), "Units: " + gcScript.UnitCount + "/" + gcScript.UnitCap);
 			#endregion
 
 			#region Display Resources
 			// If the game mode does not have a resource goal...
-			if(resourceGoal < 0)
+			if(gcScript.ResourceGoal < 0)
 			{
 				//...display only current resources
 				GUI.Label(new Rect(Screen.width - 150, 10, 150, 50),
-				          "Resources: " + resourceCurrent.ToString("F0"));
+				          "Resources: " + gcScript.CurrentResources.ToString("F0"));
 			}
 			else
 			{
 				//...else display current resources and resource goal
 				GUI.Label(new Rect(Screen.width - 150, 10, 150, 50),
-				          "Resources: " + resourceCurrent.ToString("F0") + "/" + resourceGoal);
+				          "Resources: " + gcScript.CurrentResources.ToString("F0") + "/" + gcScript.ResourceGoal);
 			}
 			#endregion
 		}
-
-		#region Display Restart Button
-		/*if(GUI.Button(new Rect(10, Screen.height - 85, 75, 75), "Restart"))
-		{
-			Application.LoadLevel("DefaultTestingScene");
-		}*/
-		#endregion
 	}
 
-	void HandleOnPause(bool flag)
+	protected void HandleOnPause(bool flag)
 	{
 		isPaused = flag;
 	}

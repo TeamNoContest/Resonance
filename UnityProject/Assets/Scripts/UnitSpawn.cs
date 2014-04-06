@@ -3,31 +3,20 @@
 using UnityEngine;
 using System.Collections;
 
-public class UnitSpawn : MonoBehaviour
+public class UnitSpawn : GUIScript
 {
-	GameController gcScript;
-	bool isPaused;
 	bool isSpawnWindowOpen;
+	Rect popupWindowRect;
 
 	// Used for calling the Spawn event
 	public delegate void SpawnUnit(string unit);
 	public static event SpawnUnit Spawn;
 
-	void Start()
+	new void Start()
 	{
-		gcScript = gameObject.GetComponent<GameController>();
-		isPaused = false;
+		base.Start();
+		popupWindowRect = new Rect(Screen.width - popupWindowWidth, Screen.height - popupWindowHeight, popupWindowWidth, popupWindowHeight);
 		isSpawnWindowOpen = false;
-	}
-
-	void OnEnable()
-	{
-		GameController.OnPause += HandleOnPause;
-	}
-
-	void OnDisable()
-	{
-		GameController.OnPause -= HandleOnPause;
 	}
 
 	void Update()
@@ -58,25 +47,20 @@ public class UnitSpawn : MonoBehaviour
 	{
 		if(isSpawnWindowOpen)
 		{
-			GUI.Window(0, new Rect(Screen.width - 200, Screen.height - 200, 200, 200), UnitSpawnWindow, "Unit Spawn");
+			GUI.Window(0, popupWindowRect, UnitSpawnWindow, "Unit Spawn");
 		}
 	}
 
 	void UnitSpawnWindow(int windowID)
 	{
-		GUI.Label(new Rect(10, 40, 70, 30), "1");
+		GUI.Label(new Rect(10, 40, 70, 30), "A");
 		GUI.Label(new Rect(50, 40, 70, 30), "Interceptor");
-		GUI.Label(new Rect(130, 40, 70, 30), gcScript.GetUnitCosts()[0].ToString());
-		GUI.Label(new Rect(10, 100, 70, 30), "2");
+		GUI.Label(new Rect(130, 40, 70, 30), gcScript.InterceptorCost.ToString());
+		GUI.Label(new Rect(10, 100, 70, 30), "B");
 		GUI.Label(new Rect(50, 100, 70, 30), "Freighter");
-		GUI.Label(new Rect(130, 100, 70, 30), gcScript.GetUnitCosts()[1].ToString());
-		GUI.Label(new Rect(10, 160, 70, 30), "3");
+		GUI.Label(new Rect(130, 100, 70, 30), gcScript.FreighterCost.ToString());
+		GUI.Label(new Rect(10, 160, 70, 30), "X");
 		GUI.Label(new Rect(50, 160, 70, 30), "Resonator");
-		GUI.Label(new Rect(130, 160, 70, 30), gcScript.GetUnitCosts()[2].ToString());
-	}
-
-	void HandleOnPause(bool flag)
-	{
-		isPaused = flag;
+		GUI.Label(new Rect(130, 160, 70, 30), gcScript.ResonatorCost.ToString());
 	}
 }
