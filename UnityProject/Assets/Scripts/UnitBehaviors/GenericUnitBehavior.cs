@@ -231,7 +231,7 @@ public class GenericUnitBehavior : MonoBehaviour
             //If no more resources to deposit, go back to the default behavior of following the player.
                 if (ResourceLoad <= 0.0f)
                 {
-                    state = State.GatherNearestResourcePoint;
+				state = State.FollowPlayer;
                     //UpdateStatusIndicator(); DELETEME
                 }
             
@@ -267,7 +267,7 @@ public class GenericUnitBehavior : MonoBehaviour
                     //If no more resources to deposit, go back to the default behavior of following the player.
                     if (ResourceLoad <= 0.0f)
                     {
-                        state = State.GatherNearestResourcePoint;
+						state = State.FollowPlayer;
                         //UpdateStatusIndicator(); DELETEME
                                 
                     }
