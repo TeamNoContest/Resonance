@@ -254,25 +254,28 @@ public class GenericUnitBehavior : MonoBehaviour
                     {
                         target = altTarget;
                     }
-
-                    if (IsWithinDistanceThreshold(target))
-                    {
-                        ApplyBrakes();
-                        TransferResourcesToSource(target); //If you're close enough to the player, drop off your resources until you're empty. - Moore
-                    } else
-                    {
-                        FlyTowardsGameObjectWithSmartBraking(target); //If you're not close enough, get closer. - Moore.
-                    }
-            
-                    //If no more resources to deposit, go back to the default behavior of following the player.
-                    if (ResourceLoad <= 0.0f)
-                    {
-						state = State.FollowPlayer;
-                        //UpdateStatusIndicator(); DELETEME
-                                
-                    }
                 }
+				else if(target == null)
+				{
+					target = altTarget;
+				}
+
+				if (IsWithinDistanceThreshold(target))
+				{
+					ApplyBrakes();
+					TransferResourcesToSource(target); //If you're close enough to the player, drop off your resources until you're empty. - Moore
+				} else
+				{
+					FlyTowardsGameObjectWithSmartBraking(target); //If you're not close enough, get closer. - Moore.
+				}
             }
+			//If no more resources to deposit, go back to the default behavior of following the player.
+			if (ResourceLoad <= 0.0f)
+			{
+				state = State.FollowPlayer;
+				//UpdateStatusIndicator(); DELETEME
+				
+			}
                 break;
 
 
@@ -539,7 +542,7 @@ public class GenericUnitBehavior : MonoBehaviour
         }
 
         //Regardless of what your command was, this unit isn't listening anymore.
-        //CommandHandler.OnCommand -= HandleCommandEvent;
+        CommandHandler.OnCommand -= HandleCommandEvent;
 		isSelected = false;
     }
 
