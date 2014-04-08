@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\CommandHandler.cs" />
      <Compile Include="Assets\Scripts\GUIScript.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
+     <Compile Include="Assets\Scripts\LibRevel.cs" />
      <Compile Include="Assets\Scripts\MusicPlayer.cs" />
      <Compile Include="Assets\Scripts\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\ResourcePointScript.cs" />
@@ -61,7 +62,10 @@
      <Compile Include="Assets\Scripts\SuperclassTest.cs" />
      <Compile Include="Assets\Scripts\TestCollision.cs" />
      <Compile Include="Assets\Scripts\TitleScreenHandler.cs" />
+     <Compile Include="Assets\Scripts\UnitBehaviors\AlphaUnitBehavior.cs" />
+     <Compile Include="Assets\Scripts\UnitBehaviors\FreighterUnitBehavior.cs" />
      <Compile Include="Assets\Scripts\UnitBehaviors\GenericUnitBehavior.cs" />
+     <Compile Include="Assets\Scripts\UnitBehaviors\InterceptorUnitBehavior.cs" />
      <Compile Include="Assets\Scripts\UnitBehaviors\ResonatorUnitBehavior.cs" />
      <Compile Include="Assets\Scripts\UnitResourcePointBehavior.cs" />
      <Compile Include="Assets\Scripts\UnitSelection.cs" />

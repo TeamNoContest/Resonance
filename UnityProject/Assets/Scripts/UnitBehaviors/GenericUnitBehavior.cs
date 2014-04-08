@@ -1,32 +1,32 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
+
+#region Enums used for state machines and easy access in inspector.
+public enum State
+{
+	Dummy,
+	FollowPlayer,
+	GatherNearestResourcePoint,
+	Stay,
+	ReturnToBase,
+	DropoffAtFreighter,
+	Attack,
+	
+	//Other states go here.
+}
+
+public enum ShipType
+{
+	Interceptor,
+	Freighter,
+	Alpha,
+	Resonator,
+	Node,
+}
+#endregion
 
 public class GenericUnitBehavior : MonoBehaviour
 {
-
-    #region Enums used for state machines and easy access in inspector.
-    public enum State
-    {
-        Dummy,
-        FollowPlayer,
-        GatherNearestResourcePoint,
-        Stay,
-		ReturnToBase,
-        DropoffAtFreighter,
-        Attack,
-        
-        //Other states go here.
-    }
-
-    public enum ShipType
-    {
-        Interceptor,
-        Freighter,
-        Alpha,
-        Resonator,
-        Node,
-    }
-    #endregion
 
     #region //Property Instantiation Section
     private const float DAMPING = 7.0f;
@@ -37,8 +37,6 @@ public class GenericUnitBehavior : MonoBehaviour
     public string AllyTag { get; set; }
 
     protected float gatheringRate { get; set; }
-
-    protected float attackRate { get; set; }
 
     protected float rateModifier { get; set; }
 
@@ -97,54 +95,20 @@ public class GenericUnitBehavior : MonoBehaviour
 
         startPosition = transform.position;
 
-        movementSpeed = 10.0f;
+        movementSpeed = 15.0f;
         resourceCapacity = 600.0f;
-        ResourceLoad = 500.0f;
-        gatheringRate = 2.0f;
+        ResourceLoad = 3000.0f;
+        gatheringRate = 100f;
         rateModifier = 1.0f;
+
+		SendMessage("SetStartValues", null, SendMessageOptions.DontRequireReceiver);
 
         interestRate = 0.005f; //Reminder: This will be overwritten each update by the value in the Game Controller. - Moore
 
         isPaused = false;
-
-        //TODO: Use a switch case here to vary up the starting stats based on whatever shipType this unit is.
-        switch (shipType)
-        {
-            case ShipType.Alpha:
-                {
-                    gatheringRate = 100.0f;
-                    attackRate = 0.0f;
-                    movementSpeed = 15.0f;
-                    resourceCapacity = -1.0f;
-                    ResourceLoad = 3000.0f;
-                    integrity = 100.0f;
-					interestRate = theGameControllerScript.InterestRate;
-                    break;
-                }
-            case ShipType.Freighter:
-                {
-                    gatheringRate = 10.0f;
-                    attackRate = 0.0f;
-                    movementSpeed = 5.0f;
-                    resourceCapacity = 1000.0f;
-                    ResourceLoad = 0.0f; 
-                    integrity = 200.0f;
-                    break;
-                }
-            case ShipType.Interceptor:
-                {
-                    gatheringRate = 1.0f;
-                    attackRate = 0.1f;
-                    movementSpeed = 25.0f;
-                    resourceCapacity = 250.0f;
-                    ResourceLoad = 0.0f;
-                    integrity = 100.0f;
-                    break;
-                }
-
-            default:
-                break;
-        }
+		
+		if (theGameControllerScript != null) {interestRate = theGameControllerScript.InterestRate;}
+          
     }
     
     // Update is called once per frame
@@ -182,13 +146,7 @@ public class GenericUnitBehavior : MonoBehaviour
             //If my resources are maxed out, return to the alpha ship (player) - Moore.
                 if (ResourceLoad >= resourceCapacity)
                 {
-                    if (shipType == ShipType.Freighter)
-                    {
-                        state = State.ReturnToBase;
-                    } else
-                    {
-                        state = State.DropoffAtFreighter;
-                    }
+                    state = State.DropoffAtFreighter;
                 }
 
                 break;
@@ -214,36 +172,33 @@ public class GenericUnitBehavior : MonoBehaviour
 
             case State.DropoffAtFreighter:
             
-            if (shipType == ShipType.Freighter)
-            {state = State.ReturnToBase;}
-            else
+            target = LibRevel.FindClosestGameObjectWithTag(gameObject, "Freighter");
+            altTarget = LibRevel.FindClosestGameObjectWithTag(gameObject, "Player");
+
+            if (target != null && altTarget != null)
             {
-            
-                target = LibRevel.FindClosestGameObjectWithTag(gameObject, "Freighter");
-                altTarget = LibRevel.FindClosestGameObjectWithTag(gameObject, "Player");
-
-                if (target != null && altTarget != null)
+                //Change the target to point at the same thing as the altTarget if the altTarget is closer.
+                if (Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.transform.position.x, target.transform.position.z)) > Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(altTarget.transform.position.x, altTarget.transform.position.z)))
                 {
-                    //Change the target to point at the same thing as the altTarget if the altTarget is closer.
-                    if (Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.transform.position.x, target.transform.position.z)) > Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(altTarget.transform.position.x, altTarget.transform.position.z)))
-                    {
-                        target = altTarget;
-                    }
+                    target = altTarget;
                 }
-				else if(target == null)
-				{
-					target = altTarget;
-				}
-
-				if (LibRevel.IsWithinDistanceThreshold(gameObject, target, distanceThreshold))
-				{
-					ApplyBrakes();
-					TransferResourcesToSource(target); //If you're close enough to the player, drop off your resources until you're empty. - Moore
-				} else
-				{
-					FlyTowardsGameObjectWithSmartBraking(target); //If you're not close enough, get closer. - Moore.
-				}
             }
+			else if(target == null)
+			{
+				target = altTarget;
+			}
+
+			if (LibRevel.IsWithinDistanceThreshold(gameObject, target, distanceThreshold))
+			{
+				ApplyBrakes();
+				TransferResourcesToSource(target); //If you're close enough to the player, drop off your resources until you're empty. - Moore
+			} 
+
+			else
+			{
+				FlyTowardsGameObjectWithSmartBraking(target); //If you're not close enough, get closer. - Moore.
+			}
+
 			//If no more resources to deposit, go back to the default behavior of following the player.
 			if (ResourceLoad <= 0.0f)
 			{
@@ -258,7 +213,6 @@ public class GenericUnitBehavior : MonoBehaviour
                     break;
                 }
         }
-
         //Any time the state changes, update the status indicator.
         if (prevState != state)
         {
@@ -360,11 +314,28 @@ public class GenericUnitBehavior : MonoBehaviour
         set { gatheringRate = value;} //Mutator
     }
 
-    public float RateModifier
-    {
-        get { return rateModifier;} //Accessor
-        set { rateModifier = value;} //Mutator
-    }
+	public float RateModifier
+	{
+		get { return rateModifier;} //Accessor
+		set { rateModifier = value;} //Mutator
+	}
+
+	public float Integrity
+	{
+		get { return integrity;} //Accessor
+		set { integrity = value;} //Mutator
+	}
+
+	public GameObject Target
+	{
+		get { return target;} //Accessor
+		set { target = value;} //Mutator
+	}
+
+	public float DistanceThreshold
+	{
+		get { return distanceThreshold;} //Accessor
+	}
 
     #endregion //Accessor/Mutator Methods - End
 
@@ -427,6 +398,7 @@ public class GenericUnitBehavior : MonoBehaviour
     {
         //TODO: Consider having events for the different state changes and then letting other objects listen out for those events intsead - Moore
         {
+
             switch (state)
             {
                 case State.Attack:

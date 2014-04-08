@@ -1,8 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\UnitBehaviors\GenericUnitBehavior.cs">
     <Files>
-      <File FileName="Assets\Scripts\UnitBehaviors\GenericUnitBehavior.cs" Line="278" Column="5" />
+      <File FileName="Assets\Scripts\UnitBehaviors\GenericUnitBehavior.cs" Line="109" Column="3" />
+      <File FileName="Assets\Scripts\UnitBehaviors\AlphaUnitBehavior.cs" Line="16" Column="2" />
+      <File FileName="Assets\Scripts\UnitBehaviors\FreighterUnitBehavior.cs" Line="115" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
