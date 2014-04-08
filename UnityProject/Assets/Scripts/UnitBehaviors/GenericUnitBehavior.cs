@@ -76,6 +76,7 @@ public class GenericUnitBehavior : MonoBehaviour
 		isSelected = false;
         CommandHandler.OnCommand -= HandleCommandEvent;
 		UnitSelection.OnDeselect -= HandleDeselectEvent;
+		UpdateStatusIndicator();
     }
 
     // Use this for initialization
@@ -282,6 +283,7 @@ public class GenericUnitBehavior : MonoBehaviour
 				UnitSelection.OnDeselect += HandleDeselectEvent;
 				isSelected = true;
                 state = State.FollowPlayer;
+				UpdateStatusIndicator();
             }
         }
     }
@@ -476,6 +478,7 @@ public class GenericUnitBehavior : MonoBehaviour
 		isSelected = false;
 		UnitSelection.OnDeselect -= HandleDeselectEvent;
 		CommandHandler.OnCommand -= HandleCommandEvent;
+		UpdateStatusIndicator();
 	}
         
 

@@ -8,7 +8,7 @@ public class CommandHandler : GUIScript
 	const int NUMBER_OF_PAGES = 1;
 
 	bool[] isCommandWindowOpen;
-	bool isFirstFrameOfSelection;
+	//bool isFirstFrameOfSelection;
 	Rect popupWindowRect;
 	bool disablePageTurn;	// Disable page turning after the first frame the button is held
 	int currentPage;
@@ -27,7 +27,7 @@ public class CommandHandler : GUIScript
 			isCommandWindowOpen[i] = false;
 		}
 
-		isFirstFrameOfSelection = true;
+		//isFirstFrameOfSelection = true;
 		popupWindowRect = new Rect(0, Screen.height - popupWindowHeight, popupWindowWidth, popupWindowHeight);
 
 
@@ -80,7 +80,7 @@ public class CommandHandler : GUIScript
 		}
 		else
 		{
-			isFirstFrameOfSelection = true;
+			//isFirstFrameOfSelection = true;
 			isCommandWindowOpen[currentPage] = false;
 			currentPage = 0;
 			disablePageTurn = false;

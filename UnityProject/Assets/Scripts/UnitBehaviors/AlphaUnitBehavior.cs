@@ -18,7 +18,7 @@ public class AlphaUnitBehavior : MonoBehaviour {
 	{
 		if (gun != null) 
 		{
-			gun.GatheringRate = 10.0f;
+			gun.GatheringRate = 100.0f;
 			gun.MovementSpeed = 15.0f;
 			gun.ResourceCapacity = -1f;
 			gun.ResourceLoad = 3000.0f; 
