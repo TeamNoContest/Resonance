@@ -37,7 +37,7 @@ public class CommandHandler : GUIScript
 	void Update()
 	{
 		#region Detect Input for Windows
-		if(Input.GetAxis("Left Trigger") == 1)
+		if(Input.GetAxis("Command Menu") == 1 || Input.GetButton("Command Menu"))
 		{
 			isCommandWindowOpen[currentPage] = true;
 

@@ -21,7 +21,7 @@ public class UnitSpawn : GUIScript
 
 	void Update()
 	{
-		if(Input.GetButton("Spawn Menu") && !isPaused)
+		if((Input.GetAxis("Spawn Menu") == 1 || Input.GetButton("Spawn Menu")) && !isPaused)
 		{
 			isSpawnWindowOpen = true;
 			if(Input.GetButtonDown("Fire1"))

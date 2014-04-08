@@ -73,6 +73,15 @@ public class TitleScreenHandler : MonoBehaviour
 				Application.Quit();
 				break;
 			case "Resume Text":
+				try
+				{
+					GameController gcScript = GameObject.Find("Game Controller Prop").GetComponent<GameController>();
+					gcScript.PauseGame(false);
+				}
+				catch
+				{
+					Application.LoadLevel(0);
+				}
 				break;
 			case "Main Menu Text":
 				Application.LoadLevel(0);

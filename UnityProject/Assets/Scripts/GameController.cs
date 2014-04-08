@@ -107,17 +107,11 @@ public class GameController : MonoBehaviour
 		{
 			if(runState == RunState.RUNNING)
 			{
-				Time.timeScale = 0;
-				runState = RunState.PAUSED;
-				menuObjectsRoot.SetActive(true);
-				OnPause(true);
+				PauseGame(true);
 			}
 			else if(runState == RunState.PAUSED)
 			{
-				menuObjectsRoot.SetActive(false);
-				Time.timeScale = 1;
-				runState = RunState.RUNNING;
-				OnPause(false);
+				PauseGame(false);
 			}
 		}
 
@@ -144,11 +138,33 @@ public class GameController : MonoBehaviour
 			if(_currentResources >= _resourceGoal)
 			{
 				// Player wins
+				Time.timeScale = 0;
+				Application.LoadLevel(2);
 			}
 			else if(_currentTime >= _timeGoal)
 			{
 				// Player loses
+				Time.timeScale = 0;
+				Application.LoadLevel(3);
 			}
+		}
+	}
+
+	public void PauseGame(bool shouldPause)
+	{
+		if(shouldPause)
+		{
+			Time.timeScale = 0;
+			runState = RunState.PAUSED;
+			menuObjectsRoot.SetActive(true);
+			OnPause(true);
+		}
+		else
+		{
+			menuObjectsRoot.SetActive(false);
+			Time.timeScale = 1;
+			runState = RunState.RUNNING;
+			OnPause(false);
 		}
 	}
 
