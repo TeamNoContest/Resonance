@@ -6,8 +6,18 @@ public class ResonatorUnitBehavior : MonoBehaviour {
 	GenericUnitBehavior gun;
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		gun = GetComponent<GenericUnitBehavior>();
+	}
+
+	void FixedUpdate () 
+	{
+		
+	}
+
+	protected void SetStartValues()
+	{
 		if (gun != null)
 		{
 			gun.MovementSpeed = 10.0f;
@@ -15,7 +25,7 @@ public class ResonatorUnitBehavior : MonoBehaviour {
 			gun.ResourceLoad = 0.0f;
 			gun.GatheringRate = 2.0f;
 			gun.RateModifier = 1.0f;
+			gun.Integrity = 50f;
 		}
-	
 	}
 }
