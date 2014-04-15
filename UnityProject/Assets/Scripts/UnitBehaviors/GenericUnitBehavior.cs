@@ -245,8 +245,10 @@ public class GenericUnitBehavior : MonoBehaviour
                     {
                         //Destroy(gameObject);
                         ResourceLoad += Random.Range(500, 1500);
-                        transform.position = LibRevel.RandomVector3InRange(theGameControllerScript.MinBoundX, theGameControllerScript.MaxBoundX, 0, 0, theGameControllerScript.MinBoundZ, theGameControllerScript.MaxBoundZ);
-
+						if (theGameControllerScript != null)
+						{
+		                	transform.position = LibRevel.RandomVector3InRange(theGameControllerScript.MinBoundX, theGameControllerScript.MaxBoundX, 0, 0, theGameControllerScript.MinBoundZ, theGameControllerScript.MaxBoundZ);
+						}
                     }
                     break;
                 }
@@ -272,7 +274,7 @@ public class GenericUnitBehavior : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        print (other);
+        print ("Trigger Enter Triggered. Other is: " + other.ToString());
         if (other.gameObject != null)
         {
             //If the object we're colliding with is a unitSelection bubble... - Moore
@@ -291,14 +293,12 @@ public class GenericUnitBehavior : MonoBehaviour
             }
 
             //If the object we're colliding with is a Resonator AoE bubble... - Moore
-            ResonatorEffectAreaBehavior reab = other.transform.parent.GetComponent<ResonatorEffectAreaBehavior>();
+            ResonatorEffectAreaBehavior reab = other.GetComponent<ResonatorEffectAreaBehavior>();
             if (reab != null)
             {
-                //Then we add ourselves to the selection and start following the player. But only if we're not a player.
-                if (shipType != ShipType.Alpha)
-                {
-                    reab.OnResonanceChange += SetRateModifer;
-                }
+				print ("Trigger Entered. 'Other' is: " + reab.ToString());
+            	reab.OnResonanceChange += SetRateModifer;
+				print (rateModifier);
             }
         }
     }
@@ -308,14 +308,14 @@ public class GenericUnitBehavior : MonoBehaviour
         if (other.gameObject != null)
         {
             //If the object we're colliding with is a Resonator AoE bubble... - Moore
-            ResonatorEffectAreaBehavior reab = other.transform.parent.GetComponent<ResonatorEffectAreaBehavior>();
+            ResonatorEffectAreaBehavior reab = other.GetComponent<ResonatorEffectAreaBehavior>();
             if (reab != null)
             {
                 //Then we add ourselves to the selection and start following the player. But only if we're not a player.
                 if (shipType != ShipType.Alpha)
                 {
                     reab.OnResonanceChange -= SetRateModifer;
-                    RateModifier = 1; //Reset the rate modifer immediately after we stop listening. - Moore
+                    RateModifier = 1f; //Reset the rate modifer immediately after we stop listening. - Moore
                 }
             }
         }
@@ -546,7 +546,7 @@ public class GenericUnitBehavior : MonoBehaviour
     {
         if (LibRevel.IsNotWithinDistanceThreshold(gameObject, theDestination, distanceThreshold))
         {
-            LibRevel.FlyTowardsGameObjectIgnoringAxes(gameObject, theDestination, MovementSpeed, ignoreY: true);
+            LibRevel.FlyTowardsGameObjectIgnoringAxes(gameObject, theDestination, MovementSpeed * RateModifier, ignoreY: true);
         } else
         {
             ApplyBrakes();

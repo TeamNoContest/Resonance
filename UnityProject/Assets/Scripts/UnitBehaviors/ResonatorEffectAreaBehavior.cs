@@ -23,6 +23,7 @@ public class ResonatorEffectAreaBehavior : MonoBehaviour
 	{
 		if (OnResonanceChange != null)
 		{
+			print ("Sending out Resonance Event. Number of Listeners: " + OnResonanceChange.GetInvocationList().Length);
 			OnResonanceChange(newRate);
 		}
 	}

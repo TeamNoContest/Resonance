@@ -5,12 +5,12 @@ public class ResonanceIndicatorBehavior : MonoBehaviour
 {
 	public Material matCyan;
 
-	public void SetVisible()
+	public void SetRIVisible()
 	{
 		renderer.enabled = true;
 	}
 
-	public void SetInvisible()
+	public void SetRIInvisible()
 	{
 		renderer.enabled = false;
 	}

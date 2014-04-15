@@ -37,13 +37,18 @@ public class ResonatorUnitBehavior : MonoBehaviour {
 			if (resonating)
 			{
 				//Deduct the cost of resonating all units in my AoE.
-				gun.ConsumeResources((Time.deltaTime * reab.GetNumberOfResonatingUnits())); // "Time.deltaTime * reab.GetNumberOfResonatingUnits()" = One Res Cost per Second Per Unit applied constantly.
+				//gun.ConsumeResources((Time.deltaTime * reab.GetNumberOfResonatingUnits())); // "Time.deltaTime * reab.GetNumberOfResonatingUnits()" = One Res Cost per Second Per Unit applied constantly.
 
 				//Apply the Boost.
 				//Suggestion: This could be a gradually building boost in increments of +0.01. That way, multiple resonators overlapping would be beneficial. But it would have a flaw when leaving the range of any one resonator.
 
 				//gun.RateModifier = 5; //Uncomment this if you want the Resonator to have the boost effect on itself. It WON'T keep track of itself in the event, though.
 				reab.SetRateModifer(5f);
+				BroadcastMessage("SetRIVisible", true, SendMessageOptions.DontRequireReceiver);
+			}
+			else
+			{
+				BroadcastMessage("SetRIInvisible", true, SendMessageOptions.DontRequireReceiver);
 			}
 		}
 	}
