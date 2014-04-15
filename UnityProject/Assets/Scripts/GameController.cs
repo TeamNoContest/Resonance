@@ -33,6 +33,16 @@ public class GameController : MonoBehaviour
 	private float _timeGoal;
 	public float TimeGoal { get { return _timeGoal; } }
 
+	// The minimum and maximum bounds of the playing area.
+	private float _minBoundX;
+	public float MinBoundX { get { return _minBoundX; } }
+	private float _maxBoundX;
+	public float MaxBoundX { get { return _maxBoundX; } }
+	private float _minBoundZ;
+	public float MinBoundZ { get { return _minBoundZ; } }
+	private float _maxBoundZ;
+	public float MaxBoundZ { get { return _maxBoundZ; } }
+
 	// Current and maximum number of units
 	private int _unitCount;
 	public int UnitCount { get { return _unitCount; } }
@@ -66,9 +76,13 @@ public class GameController : MonoBehaviour
 		runState = RunState.RUNNING;
 		_resourceGoal = 10000f;
 		_currentTime = 0f;
-		_timeGoal = 3600f;	// one hour time limit
+		_timeGoal = 300f;	// one hour time limit
 		_interestRate = 0.001f;
 		//interestTime = 5f;
+		_minBoundX = -500;
+		_maxBoundX = 500;
+		_minBoundZ = -500;
+		_maxBoundZ = 500;
 		_unitCount = 0;
 		_unitCap = 10;
 		_interceptorCost = 1000;

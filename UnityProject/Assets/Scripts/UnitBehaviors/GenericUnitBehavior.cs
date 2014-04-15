@@ -82,7 +82,7 @@ public class GenericUnitBehavior : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        if (shipType == ShipType.Alpha)
+        if (shipType == ShipType.Alpha || shipType == ShipType.Node)
         {
             theGameControllerScript = theGameController.GetComponent<GameController>();
         }
@@ -92,13 +92,13 @@ public class GenericUnitBehavior : MonoBehaviour
         // I need access to this script so I can detect if the game is paused.
         // (Refer to the OnGUI method.)
 
-        playingArea = GameObject.FindGameObjectWithTag("PlayingArea");
+        playingArea = GameObject.Find("PlayingArea");
 
         startPosition = transform.position;
 
         movementSpeed = 15.0f;
         resourceCapacity = 600.0f;
-        ResourceLoad = 200.0f;
+        ResourceLoad = Random.Range(500, 1500);
         gatheringRate = 100f;
         rateModifier = 1.0f;
 
@@ -244,8 +244,8 @@ public class GenericUnitBehavior : MonoBehaviour
                     if (ResourceLoad <= 0)
                     {
                         //Destroy(gameObject);
-                        ResourceLoad += Random.Range(200, 2000);
-                        transform.position = LibRevel.RandomVector3InRange(playingArea.renderer.bounds.min.x, playingArea.renderer.bounds.max.x, 0, 0, playingArea.renderer.bounds.min.z, playingArea.renderer.bounds.max.z);
+                        ResourceLoad += Random.Range(500, 1500);
+                        transform.position = LibRevel.RandomVector3InRange(theGameControllerScript.MinBoundX, theGameControllerScript.MaxBoundX, 0, 0, theGameControllerScript.MinBoundZ, theGameControllerScript.MaxBoundZ);
 
                     }
                     break;

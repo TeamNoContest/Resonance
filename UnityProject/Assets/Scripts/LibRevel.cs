@@ -54,6 +54,9 @@ public static class LibRevel
         float tempX = Random.Range(xMin, xMax);
         float tempY = Random.Range(yMin, yMax);
         float tempZ = Random.Range(zMin, zMax);
+
+		Debug.Log(xMin + ":" + xMax + ", " + yMin + ":" + yMax + ", " + zMin + ":" + zMax);
+		Debug.Log(tempX + ", " + tempY + ", " + tempZ);
         
         return new Vector3(tempX, tempY, tempZ);
     }
