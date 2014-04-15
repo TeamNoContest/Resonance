@@ -4,24 +4,24 @@ using System.Collections;
 #region Enums used for state machines and easy access in inspector.
 public enum State
 {
-	Dummy,
-	FollowPlayer,
-	GatherNearestResourcePoint,
-	Stay,
-	ReturnToBase,
-	DropoffAtFreighter,
-	Attack,
-	
-	//Other states go here.
+    Dummy,
+    FollowPlayer,
+    GatherNearestResourcePoint,
+    Stay,
+    ReturnToBase,
+    DropoffAtFreighter,
+    Attack,
+    
+    //Other states go here.
 }
 
 public enum ShipType
 {
-	Interceptor,
-	Freighter,
-	Alpha,
-	Resonator,
-	Node,
+    Interceptor,
+    Freighter,
+    Alpha,
+    Resonator,
+    Node,
 }
 #endregion
 
@@ -53,7 +53,7 @@ public class GenericUnitBehavior : MonoBehaviour
     protected Vector3 startPosition;
     protected const float distanceThreshold = 20.0f;
     private bool isPaused;
-	public bool isSelected;
+    public bool isSelected;
     public GameObject target;
     public GameObject altTarget;
     public GameObject playingArea;
@@ -73,10 +73,10 @@ public class GenericUnitBehavior : MonoBehaviour
     void OnDisable()
     {
         GameController.OnPause -= HandleOnPause;
-		isSelected = false;
+        isSelected = false;
         CommandHandler.OnCommand -= HandleCommandEvent;
-		UnitSelection.OnDeselect -= HandleDeselectEvent;
-		UpdateStatusIndicator();
+        UnitSelection.OnDeselect -= HandleDeselectEvent;
+        UpdateStatusIndicator();
     }
 
     // Use this for initialization
@@ -102,13 +102,16 @@ public class GenericUnitBehavior : MonoBehaviour
         gatheringRate = 100f;
         rateModifier = 1.0f;
 
-		SendMessage("SetStartValues", null, SendMessageOptions.DontRequireReceiver);
+        SendMessage("SetStartValues", null, SendMessageOptions.DontRequireReceiver);
 
         interestRate = 0.005f; //Reminder: This will be overwritten each update by the value in the Game Controller. - Moore
 
         isPaused = false;
-		
-		if (theGameControllerScript != null) {interestRate = theGameControllerScript.InterestRate;}
+        
+        if (theGameControllerScript != null)
+        {
+            interestRate = theGameControllerScript.InterestRate;
+        }
           
     }
     
@@ -166,45 +169,42 @@ public class GenericUnitBehavior : MonoBehaviour
             //If no more resources to deposit, go back to the default behavior of following the player.
                 if (ResourceLoad <= 0.0f)
                 {
-					state = State.FollowPlayer;
+                    state = State.FollowPlayer;
                 }
             
                 break;
 
             case State.DropoffAtFreighter:
             
-            target = LibRevel.FindClosestGameObjectWithTag(gameObject, "Freighter");
-            altTarget = LibRevel.FindClosestGameObjectWithTag(gameObject, "Player");
+                target = LibRevel.FindClosestGameObjectWithTag(gameObject, "Freighter");
+                altTarget = LibRevel.FindClosestGameObjectWithTag(gameObject, "Player");
 
-            if (target != null && altTarget != null)
-            {
-                //Change the target to point at the same thing as the altTarget if the altTarget is closer.
-                if (Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.transform.position.x, target.transform.position.z)) > Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(altTarget.transform.position.x, altTarget.transform.position.z)))
+                if (target != null && altTarget != null)
+                {
+                    //Change the target to point at the same thing as the altTarget if the altTarget is closer.
+                    if (Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.transform.position.x, target.transform.position.z)) > Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(altTarget.transform.position.x, altTarget.transform.position.z)))
+                    {
+                        target = altTarget;
+                    }
+                } else if (target == null)
                 {
                     target = altTarget;
                 }
-            }
-			else if(target == null)
-			{
-				target = altTarget;
-			}
 
-			if (LibRevel.IsWithinDistanceThreshold(gameObject, target, distanceThreshold))
-			{
-				ApplyBrakes();
-				TransferResourcesToSource(target); //If you're close enough to the player, drop off your resources until you're empty. - Moore
-			} 
+                if (LibRevel.IsWithinDistanceThreshold(gameObject, target, distanceThreshold))
+                {
+                    ApplyBrakes();
+                    TransferResourcesToSource(target); //If you're close enough to the player, drop off your resources until you're empty. - Moore
+                } else
+                {
+                    FlyTowardsGameObjectWithSmartBraking(target); //If you're not close enough, get closer. - Moore.
+                }
 
-			else
-			{
-				FlyTowardsGameObjectWithSmartBraking(target); //If you're not close enough, get closer. - Moore.
-			}
-
-			//If no more resources to deposit, go back to the default behavior of following the player.
-			if (ResourceLoad <= 0.0f)
-			{
-				state = State.FollowPlayer;
-			}
+            //If no more resources to deposit, go back to the default behavior of following the player.
+                if (ResourceLoad <= 0.0f)
+                {
+                    state = State.FollowPlayer;
+                }
                 break;
 
 
@@ -272,18 +272,51 @@ public class GenericUnitBehavior : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        //If the object we're colliding with is a unitSelection bubble... - Moore
-        UnitSelection usScript = other.transform.parent.GetComponent<UnitSelection>();
-        if (usScript != null)
+        print (other);
+        if (other.gameObject != null)
         {
-            //Then we add ourselves to the selection and start following the player. But only if we're not a player.
-            if (shipType != ShipType.Alpha)
+            //If the object we're colliding with is a unitSelection bubble... - Moore
+            UnitSelection usScript = other.transform.parent.GetComponent<UnitSelection>();
+            if (usScript != null)
             {
-                CommandHandler.OnCommand += HandleCommandEvent;
-				UnitSelection.OnDeselect += HandleDeselectEvent;
-				isSelected = true;
-                state = State.FollowPlayer;
-				UpdateStatusIndicator();
+                //Then we add ourselves to the selection and start following the player. But only if we're not a player.
+                if (shipType != ShipType.Alpha)
+                {
+                    CommandHandler.OnCommand += HandleCommandEvent;
+                    UnitSelection.OnDeselect += HandleDeselectEvent;
+                    isSelected = true;
+                    state = State.FollowPlayer;
+                    UpdateStatusIndicator();
+                }
+            }
+
+            //If the object we're colliding with is a Resonator AoE bubble... - Moore
+            ResonatorEffectAreaBehavior reab = other.transform.parent.GetComponent<ResonatorEffectAreaBehavior>();
+            if (reab != null)
+            {
+                //Then we add ourselves to the selection and start following the player. But only if we're not a player.
+                if (shipType != ShipType.Alpha)
+                {
+                    reab.OnResonanceChange += SetRateModifer;
+                }
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject != null)
+        {
+            //If the object we're colliding with is a Resonator AoE bubble... - Moore
+            ResonatorEffectAreaBehavior reab = other.transform.parent.GetComponent<ResonatorEffectAreaBehavior>();
+            if (reab != null)
+            {
+                //Then we add ourselves to the selection and start following the player. But only if we're not a player.
+                if (shipType != ShipType.Alpha)
+                {
+                    reab.OnResonanceChange -= SetRateModifer;
+                    RateModifier = 1; //Reset the rate modifer immediately after we stop listening. - Moore
+                }
             }
         }
     }
@@ -295,7 +328,14 @@ public class GenericUnitBehavior : MonoBehaviour
     public float ResourceLoad
     {
         get { return resourceLoad;} //Accessor
-        set { resourceLoad = value;} //Mutator
+        set
+        { 
+            resourceLoad = value; 
+            if (resourceLoad < 0)
+            {
+                resourceLoad = 0; //With enforced minimum.
+            }
+        } //Mutator
     }
 
     public float MovementSpeed
@@ -316,28 +356,39 @@ public class GenericUnitBehavior : MonoBehaviour
         set { gatheringRate = value;} //Mutator
     }
 
-	public float RateModifier
-	{
-		get { return rateModifier;} //Accessor
-		set { rateModifier = value;} //Mutator
-	}
+    public float RateModifier
+    {
+        get { return rateModifier;} //Accessor
+        set { rateModifier = value;} //Mutator
+    }
 
-	public float Integrity
-	{
-		get { return integrity;} //Accessor
-		set { integrity = value;} //Mutator
-	}
+    public float Integrity
+    {
+        get { return integrity;} //Accessor
+        set { integrity = value;} //Mutator
+    }
 
-	public GameObject Target
-	{
-		get { return target;} //Accessor
-		set { target = value;} //Mutator
-	}
+    public GameObject Target
+    {
+        get { return target;} //Accessor
+        set { target = value;} //Mutator
+    }
 
-	public float DistanceThreshold
-	{
-		get { return distanceThreshold;} //Accessor
-	}
+    public float DistanceThreshold
+    {
+        get { return distanceThreshold;} //Accessor
+    }
+
+    // This separate method exists so that we can use it as a listern for ResonatorEffect's OnResonanceChange Event. - Moore
+    public void SetRateModifer(float value)
+    {
+        RateModifier = value;
+    }
+
+    public void ConsumeResources(float cost)
+    {
+        ResourceLoad -= cost;
+    }
 
     #endregion //Accessor/Mutator Methods - End
 
@@ -412,14 +463,13 @@ public class GenericUnitBehavior : MonoBehaviour
                     break;
                 
                 case State.FollowPlayer:
-					if(isSelected)
-					{
-						BroadcastMessage("SetMaterialBlue", true, SendMessageOptions.DontRequireReceiver);
-					}
-					else
-					{
-                    	BroadcastMessage("SetMaterialWhite", true, SendMessageOptions.DontRequireReceiver);
-					}
+                    if (isSelected)
+                    {
+                        BroadcastMessage("SetMaterialBlue", true, SendMessageOptions.DontRequireReceiver);
+                    } else
+                    {
+                        BroadcastMessage("SetMaterialWhite", true, SendMessageOptions.DontRequireReceiver);
+                    }
                     break;
                 
                 case State.ReturnToBase:
@@ -443,7 +493,7 @@ public class GenericUnitBehavior : MonoBehaviour
         {
             case Command.NULL:
                 CommandHandler.OnCommand -= HandleCommandEvent;
-				isSelected = false;
+                isSelected = false;
                 break;
             
             case Command.ATTACK:
@@ -459,8 +509,14 @@ public class GenericUnitBehavior : MonoBehaviour
                 break;
             
             case Command.UNLOAD:
-            if (shipType == ShipType.Freighter) {state = State.ReturnToBase;} //WORKAROUND: We shouldn't be checking for shiptypes here at all. Right now, the state is set over and over until the 'selection' is ended.
-            else {state = State.DropoffAtFreighter;} // - This is different from Dropoff at Freighter (Which is done while out collecting) as it goes ONLY to the player. The player will collect much faster and is already in selection range. - Moore
+                if (shipType == ShipType.Freighter)
+                {
+                    state = State.ReturnToBase;
+                } //WORKAROUND: We shouldn't be checking for shiptypes here at all. Right now, the state is set over and over until the 'selection' is ended.
+            else
+                {
+                    state = State.DropoffAtFreighter;
+                } // - This is different from Dropoff at Freighter (Which is done while out collecting) as it goes ONLY to the player. The player will collect much faster and is already in selection range. - Moore
                 break;
             
             default:
@@ -469,34 +525,33 @@ public class GenericUnitBehavior : MonoBehaviour
 
         //Regardless of what your command was, this unit isn't listening anymore.
         CommandHandler.OnCommand -= HandleCommandEvent;
-		isSelected = false;
+        isSelected = false;
     }
 
-	// This message is broadcast whenever the player starts the selection process by pressing the Select Units button
-	protected void HandleDeselectEvent()
-	{
-		isSelected = false;
-		UnitSelection.OnDeselect -= HandleDeselectEvent;
-		CommandHandler.OnCommand -= HandleCommandEvent;
-		UpdateStatusIndicator();
-	}
+    // This message is broadcast whenever the player starts the selection process by pressing the Select Units button
+    protected void HandleDeselectEvent()
+    {
+        isSelected = false;
+        UnitSelection.OnDeselect -= HandleDeselectEvent;
+        CommandHandler.OnCommand -= HandleCommandEvent;
+        UpdateStatusIndicator();
+    }
         
 
     #endregion //Mutator/Logic Methods - End
 
     #region //Utility Methods - Start
 
-	protected void FlyTowardsGameObjectInRange(GameObject theDestination)
-	{
-		if (LibRevel.IsNotWithinDistanceThreshold(gameObject, theDestination, distanceThreshold))
-		{
-			LibRevel.FlyTowardsGameObjectIgnoringAxes(gameObject, theDestination, MovementSpeed, ignoreY:true);
-		}
-		else
-		{
-			ApplyBrakes();
-		}
-	}
+    protected void FlyTowardsGameObjectInRange(GameObject theDestination)
+    {
+        if (LibRevel.IsNotWithinDistanceThreshold(gameObject, theDestination, distanceThreshold))
+        {
+            LibRevel.FlyTowardsGameObjectIgnoringAxes(gameObject, theDestination, MovementSpeed, ignoreY: true);
+        } else
+        {
+            ApplyBrakes();
+        }
+    }
 
     protected void FlyTowardsGameObjectWithSmartBraking(GameObject destination)
     {
@@ -546,7 +601,7 @@ public class GenericUnitBehavior : MonoBehaviour
     //Convenience Negation Wrapper Method for the above:
     protected bool IsNotWithinBrakingDistance(GameObject destination)
     {
-		return !IsWithinBrakingDistance(destination);
+        return !IsWithinBrakingDistance(destination);
     }
 
     protected void ApplyBrakes()
