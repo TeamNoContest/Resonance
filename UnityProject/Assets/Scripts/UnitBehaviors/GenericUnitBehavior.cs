@@ -76,7 +76,6 @@ public class GenericUnitBehavior : MonoBehaviour
         isSelected = false;
         CommandHandler.OnCommand -= HandleCommandEvent;
         UnitSelection.OnDeselect -= HandleDeselectEvent;
-        UpdateStatusIndicator();
     }
 
     // Use this for initialization
@@ -282,7 +281,7 @@ public class GenericUnitBehavior : MonoBehaviour
             if (usScript != null)
             {
                 //Then we add ourselves to the selection and start following the player. But only if we're not a player.
-                if (shipType != ShipType.Alpha)
+                if (shipType != ShipType.Alpha && shipType != ShipType.Node)
                 {
                     CommandHandler.OnCommand += HandleCommandEvent;
                     UnitSelection.OnDeselect += HandleDeselectEvent;
@@ -449,6 +448,7 @@ public class GenericUnitBehavior : MonoBehaviour
 
     protected void UpdateStatusIndicator()
     {
+		print(gameObject.name);
         //TODO: Consider having events for the different state changes and then letting other objects listen out for those events intsead - Moore
         {
 
@@ -532,10 +532,10 @@ public class GenericUnitBehavior : MonoBehaviour
     protected void HandleDeselectEvent()
     {
         isSelected = false;
+		UpdateStatusIndicator();
         UnitSelection.OnDeselect -= HandleDeselectEvent;
         CommandHandler.OnCommand -= HandleCommandEvent;
-        UpdateStatusIndicator();
-    }
+	}
         
 
     #endregion //Mutator/Logic Methods - End

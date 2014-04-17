@@ -1,14 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\UnitBehaviors\ResonatorUnitBehavior.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\UnitSelection.cs">
     <Files>
-      <File FileName="Assets\Scripts\UnitBehaviors\GenericUnitBehavior.cs" Line="458" Column="102" />
-      <File FileName="Assets\Scripts\LibRevel.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\UnitBehaviors\ResonatorEffectAreaBehavior.cs" Line="41" Column="1" />
-      <File FileName="Assets\Scripts\UnitBehaviors\InterceptorUnitBehavior.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\IndicatorBehaviors\StatusIndicatorBehavior.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\IndicatorBehaviors\ResonanceIndicatorBehavior.cs" Line="18" Column="1" />
-      <File FileName="Assets\Scripts\UnitBehaviors\ResonatorUnitBehavior.cs" Line="51" Column="31" />
+      <File FileName="Assets\Scripts\UnitBehaviors\GenericUnitBehavior.cs" Line="78" Column="57" />
+      <File FileName="Assets\Scripts\TitleScreenHandler.cs" Line="87" Column="37" />
+      <File FileName="Assets\Scripts\UnitSelection.cs" Line="20" Column="41" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

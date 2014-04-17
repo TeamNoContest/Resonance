@@ -76,7 +76,7 @@ public class GameController : MonoBehaviour
 		runState = RunState.RUNNING;
 		_resourceGoal = 10000f;
 		_currentTime = 0f;
-		_timeGoal = 300f;	// one hour time limit
+		_timeGoal = 300f;	// five-minute time limit
 		_interestRate = 0.001f;
 		//interestTime = 5f;
 		_minBoundX = -500;

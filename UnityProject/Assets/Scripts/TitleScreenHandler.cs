@@ -84,6 +84,7 @@ public class TitleScreenHandler : MonoBehaviour
 				}
 				break;
 			case "Main Menu Text":
+				UnitSelection.RemoveAllListeners();
 				Application.LoadLevel(0);
 				break;
 			default:

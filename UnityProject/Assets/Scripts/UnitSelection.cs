@@ -17,6 +17,15 @@ public class UnitSelection : MonoBehaviour
 	public delegate void SelectionEventHandler();
 	public static event SelectionEventHandler OnDeselect;
 
+	// If there are listeners, remove them.
+	public static void RemoveAllListeners()
+	{
+		if(OnDeselect != null)
+		{
+			OnDeselect();
+		}
+	}
+
 	void Awake()
 	{
 		audioCommands = new AudioSource[clipsCommands.Length];
