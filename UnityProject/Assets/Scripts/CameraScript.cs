@@ -14,6 +14,7 @@ using System.Collections;
 
 public class CameraScript : MonoBehaviour
 {
+	public const int CAMERA_SPEED = 50;
 	public const int MIN_ZOOM_DISTANCE = 80;
 	public const int MAX_ZOOM_DISTANCE = 200;
 	public float distanceFromPlayer;
@@ -33,11 +34,11 @@ public class CameraScript : MonoBehaviour
 		#region Rotation
 		if(Input.GetAxis("Camera Horizontal") > 0)
 		{
-			transform.RotateAround(target.position, Vector3.up, 40 * Time.deltaTime);
+			transform.RotateAround(target.position, Vector3.up, CAMERA_SPEED * Time.deltaTime);
 		}
 		else if(Input.GetAxis("Camera Horizontal") < 0)
 		{
-			transform.RotateAround(target.position, -Vector3.up, 40 * Time.deltaTime);
+			transform.RotateAround(target.position, -Vector3.up, CAMERA_SPEED * Time.deltaTime);
 		}
 		#endregion
 
