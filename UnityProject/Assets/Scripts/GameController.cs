@@ -17,8 +17,6 @@ public class GameController : MonoBehaviour
 	private float _interestRate;
 	public float InterestRate { get { return _interestRate; } }
 
-	//float interestTime;		// The amount of time in seconds between interest awards
-
 	// Number of resources inside the player's ship
 	private float _currentResources;
 	public float CurrentResources { get { return _currentResources; } }
@@ -74,22 +72,20 @@ public class GameController : MonoBehaviour
 	{
 		gameMode = GameMode.TIME_LIMIT;
 		runState = RunState.RUNNING;
-		_resourceGoal = 10000f;
+		_resourceGoal = 7500f;
 		_currentTime = 0f;
 		_timeGoal = 300f;	// five-minute time limit
 		_interestRate = 0.001f;
 		//interestTime = 5f;
-		_minBoundX = -500;
-		_maxBoundX = 500;
-		_minBoundZ = -500;
-		_maxBoundZ = 500;
+		_minBoundX = -350;
+		_maxBoundX = 350;
+		_minBoundZ = -350;
+		_maxBoundZ = 350;
 		_unitCount = 0;
 		_unitCap = 10;
 		_interceptorCost = 1000;
 		_freighterCost = 1000;
 		_resonatorCost = 1000;
-
-		//InvokeRepeating("AwardInterest", interestTime, interestTime); // Sorry for tweaking this without asking first. Gonna use Time.deltaTime for continuous intrest accruement. - Moore
 
 		//Initializing the values that retlate this to the other script. 
 		//This is not the best OOP because of the forced coupling. If you have an idea for how to keep the functionality and reduce this coupling, let me know. - Moore

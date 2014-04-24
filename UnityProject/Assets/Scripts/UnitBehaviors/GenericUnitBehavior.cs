@@ -448,7 +448,6 @@ public class GenericUnitBehavior : MonoBehaviour
 
     protected void UpdateStatusIndicator()
     {
-		print(gameObject.name);
         //TODO: Consider having events for the different state changes and then letting other objects listen out for those events intsead - Moore
         {
 
