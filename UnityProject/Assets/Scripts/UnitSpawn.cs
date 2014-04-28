@@ -7,6 +7,9 @@ public class UnitSpawn : GUIScript
 {
 	bool isSpawnWindowOpen;
 	Rect popupWindowRect;
+	GUIStyle windowStyle, windowTextStyle;
+
+	public Texture xboxA, xboxB, xboxX, xboxY;
 
 	// Used for calling the Spawn event
 	public delegate void SpawnUnit(string unit);
@@ -17,6 +20,10 @@ public class UnitSpawn : GUIScript
 		base.Start();
 		popupWindowRect = new Rect(Screen.width - popupWindowWidth, Screen.height - popupWindowHeight, popupWindowWidth, popupWindowHeight);
 		isSpawnWindowOpen = false;
+
+		windowStyle = new GUIStyle();
+		windowTextStyle = new GUIStyle(base.textStyleBase);
+		windowTextStyle.fontSize = 20;
 	}
 
 	void Update()
@@ -47,20 +54,20 @@ public class UnitSpawn : GUIScript
 	{
 		if(isSpawnWindowOpen)
 		{
-			GUI.Window(0, popupWindowRect, UnitSpawnWindow, "Unit Spawn");
+			GUI.Window(0, popupWindowRect, UnitSpawnWindow, "Unit Spawn", windowStyle);
 		}
 	}
 
 	void UnitSpawnWindow(int windowID)
 	{
-		GUI.Label(new Rect(popupWindowWidth * (1f/7f), popupWindowHeight * (1f/5f), 70, 30), "A");
-		GUI.Label(new Rect(popupWindowWidth * (1f/3f), popupWindowHeight * (1f/5f), 70, 30), "Interceptor");
-		GUI.Label(new Rect(popupWindowWidth * (5f/7f), popupWindowHeight * (1f/5f), 70, 30), gcScript.InterceptorCost.ToString());
-		GUI.Label(new Rect(popupWindowWidth * (1f/7f), popupWindowHeight * (2f/5f), 70, 30), "B");
-		GUI.Label(new Rect(popupWindowWidth * (1f/3f), popupWindowHeight * (2f/5f), 70, 30), "Freighter");
-		GUI.Label(new Rect(popupWindowWidth * (5f/7f), popupWindowHeight * (2f/5f), 70, 30), gcScript.FreighterCost.ToString());
-		GUI.Label(new Rect(popupWindowWidth * (1f/7f), popupWindowHeight * (3f/5f), 70, 30), "X");
-		GUI.Label(new Rect(popupWindowWidth * (1f/3f), popupWindowHeight * (3f/5f), 70, 30), "Resonator");
-		GUI.Label(new Rect(popupWindowWidth * (5f/7f), popupWindowHeight * (3f/5f), 70, 30), gcScript.ResonatorCost.ToString());
+		GUI.DrawTexture(new Rect(popupWindowWidth * 0.05f, popupWindowHeight * 0.25f, 50, 50), xboxA);
+		GUI.Label(new Rect(popupWindowWidth * 0.30f, popupWindowHeight * 0.30f, 70, 30), "Interceptor", windowTextStyle);
+		GUI.Label(new Rect(popupWindowWidth * 0.75f, popupWindowHeight * 0.30f, 70, 30), gcScript.InterceptorCost.ToString(), windowTextStyle);
+		GUI.DrawTexture(new Rect(popupWindowWidth * 0.05f, popupWindowHeight * 0.50f, 50, 50), xboxB);
+		GUI.Label(new Rect(popupWindowWidth * 0.30f, popupWindowHeight * 0.55f, 70, 30), "Freighter", windowTextStyle);
+		GUI.Label(new Rect(popupWindowWidth * 0.75f, popupWindowHeight * 0.55f, 70, 30), gcScript.FreighterCost.ToString(), windowTextStyle);
+		GUI.DrawTexture(new Rect(popupWindowWidth * 0.05f, popupWindowHeight * 0.75f, 50, 50), xboxX);
+		GUI.Label(new Rect(popupWindowWidth * 0.30f, popupWindowHeight * 0.80f, 70, 30), "Resonator", windowTextStyle);
+		GUI.Label(new Rect(popupWindowWidth * 0.75f, popupWindowHeight * 0.80f, 70, 30), gcScript.ResonatorCost.ToString(), windowTextStyle);
 	}
 }

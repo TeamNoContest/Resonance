@@ -13,6 +13,9 @@ public class CommandHandler : GUIScript
 	bool disablePageTurn;	// Disable page turning after the first frame the button is held
 	int currentPage;
 	Command command;
+	GUIStyle windowStyle, windowTextStyle;
+
+	public Texture xboxA, xboxB, xboxX, xboxY;
 
 	public delegate void CommandEventHandler(Command command);
 	public static event CommandEventHandler OnCommand;
@@ -30,8 +33,11 @@ public class CommandHandler : GUIScript
 		//isFirstFrameOfSelection = true;
 		popupWindowRect = new Rect(0, Screen.height - popupWindowHeight, popupWindowWidth, popupWindowHeight);
 
-
 		currentPage = 0;
+
+		windowStyle = new GUIStyle();
+		windowTextStyle = new GUIStyle(base.textStyleBase);
+		windowTextStyle.fontSize = 20;
 	}
 
 	void Update()
@@ -132,7 +138,7 @@ public class CommandHandler : GUIScript
 		{
 			if(isCommandWindowOpen[i])
 			{
-				GUI.Window(i, popupWindowRect, CommandWindow, "Unit Command Page " + (i+1));
+				GUI.Window(i, popupWindowRect, CommandWindow, "Unit Command Page " + (i+1), windowStyle);
 			}
 		}
 	}
@@ -146,24 +152,24 @@ public class CommandHandler : GUIScript
 		switch(windowID)
 		{
 		case 0:
-			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (1f/5f), 70, 30), "A");
-			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (1f/5f), 70, 30), "Attack");
-			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (2f/5f), 70, 30), "B");
-			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (2f/5f), 70, 30), "Collect");
-			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (3f/5f), 70, 30), "X");
-			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (3f/5f), 70, 30), "Stay");
-			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (4f/5f), 70, 30), "Y");
-			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (4f/5f), 70, 30), "Unload");
+			GUI.DrawTexture(new Rect(popupWindowWidth * 0.17f, popupWindowHeight * 0.15f, 50, 50), xboxA);
+			GUI.Label(new Rect(popupWindowWidth * 0.5f, popupWindowHeight * 0.2f, 70, 30), "Attack", windowTextStyle);
+			GUI.DrawTexture(new Rect(popupWindowWidth * 0.17f, popupWindowHeight * 0.35f, 50, 50), xboxB);
+			GUI.Label(new Rect(popupWindowWidth * 0.5f, popupWindowHeight * 0.4f, 70, 30), "Collect", windowTextStyle);
+			GUI.DrawTexture(new Rect(popupWindowWidth * 0.17f, popupWindowHeight * 0.55f, 50, 50), xboxX);
+			GUI.Label(new Rect(popupWindowWidth * 0.5f, popupWindowHeight * 0.6f, 70, 30), "Stay", windowTextStyle);
+			GUI.DrawTexture(new Rect(popupWindowWidth * 0.17f, popupWindowHeight * 0.75f, 50, 50), xboxY);
+			GUI.Label(new Rect(popupWindowWidth * 0.5f, popupWindowHeight * 0.8f, 70, 30), "Unload", windowTextStyle);
 			break;
 		case 1:
 			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (1f/5f), 70, 30), "A");
-			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (1f/5f), 70, 30), "Placeholder");
+			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (1f/5f), 70, 30), "Placeholder", windowTextStyle);
 			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (2f/5f), 70, 30), "B");
-			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (2f/5f), 70, 30), "Placeholder");
+			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (2f/5f), 70, 30), "Placeholder", windowTextStyle);
 			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (3f/5f), 70, 30), "X");
-			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (3f/5f), 70, 30), "Placeholder");
+			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (3f/5f), 70, 30), "Placeholder", windowTextStyle);
 			GUI.Label(new Rect(popupWindowWidth * (1f/4f), popupWindowHeight * (4f/5f), 70, 30), "Y");
-			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (4f/5f), 70, 30), "Placeholder");
+			GUI.Label(new Rect(popupWindowWidth * (1f/2f), popupWindowHeight * (4f/5f), 70, 30), "Placeholder", windowTextStyle);
 			break;
 		default:
 			break;
